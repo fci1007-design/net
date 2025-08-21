@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寶隆產品登錄與客戶管理視覺化流程</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to bottom, #ffffff, #f8fafc);
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 48px 0 24px;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.025em;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hero p {
+            color: #64748b;
+            max-width: 42rem;
+            margin-bottom: 16px;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Phase Cards */
+        .phases {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .phases {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .phase-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .phase-card.p1 {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+        }
+
+        .phase-card.p2 {
+            background: #ecfdf5;
+            border-color: #bbf7d0;
+        }
+
+        .phase-card.p3 {
+            background: #fffbeb;
+            border-color: #fed7aa;
+        }
+
+        .phase-card.p4 {
+            background: #fdf2f8;
+            border-color: #fecaca;
+        }
+
+        .phase-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .phase-subtitle {
+            color: #1e293b;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .phase-points {
+            list-style: disc;
+            padding-left: 20px;
+            color: #374151;
+        }
+
+        .phase-points li {
+            margin-bottom: 4px;
+        }
+
+        /* Separator */
+        .separator {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 32px 0;
+        }
+
+        /* NEW: Section Block Styles */
+        .content-section {
+            padding: 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+        }
+        .content-section h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Flowchart Section */
+        #flowchart-section {
+            background-color: #f0f9ff; /* Light Blue */
+        }
+        
+        /* Swimlane Section */
+        #swimlane-section {
+            background-color: #f0fdf4; /* Light Green */
+        }
+
+        /* Value Section */
+        #value-section {
+            background-color: #fffbeb; /* Light Yellow */
+        }
+        
+
+        /* Diagram */
+        .diagram {
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+            min-width: 900px;
+        }
+
+        .diagram-step {
+            position: relative;
+            background: #e0f2fe; /* Coordinated blue */
+            border: 1px solid #bae6fd;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .diagram-step:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: #ccebfe;
+        }
+
+        .diagram-step-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diagram-step-title {
+            font-weight: 600;
+        }
+
+        .diagram-step-sub {
+            font-size: 0.75rem;
+            color: #0c4a6e;
+        }
+
+        .arrow-right {
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #38bdf8;
+            z-index: 10;
+        }
+
+        /* Swimlane */
+        .swimlane-note {
+            margin-bottom: 24px;
+            background-color: #dcfce7;
+            border-left: 4px solid #4ade80;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #166534;
+        }
+        
+        .swimlane {
+            overflow-x: auto;
+        }
+
+        .swimlane-container {
+            min-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .swimlane-row {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            display: flex;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .swimlane-actor {
+            width: 160px;
+            padding: 12px;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .swimlane-actor.bg-sky { background: #e0f2fe; color: #0c4a6e;}
+        .swimlane-actor.bg-emerald { background: #d1fae5; color: #065f46;}
+        .swimlane-actor.bg-indigo { background: #e0e7ff; color: #3730a3;}
+        .swimlane-actor.bg-amber { background: #fef3c7; color: #92400e;}
+        .swimlane-actor.bg-rose { background: #ffe4e6; color: #9f1239;}
+        .swimlane-actor.bg-teal { background: #ccfbf1; color: #134e4a;}
+
+        .swimlane-items {
+            flex: 1;
+            padding: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .swimlane-item {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px 12px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            font-size: 0.875rem;
+            color: #334155;
+        }
+
+        /* Value Cards */
+        .value-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .value-card {
+            background: #fef9c3; /* Coordinated yellow */
+            border: 1px solid #fde68a;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background: #fef3c7;
+        }
+
+        .value-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .value-card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            flex: 1;
+            color: #78350f;
+        }
+
+        .value-card-tag {
+            background: #fde68a;
+            color: #92400e;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .value-card-desc {
+            color: #78350f;
+            margin-bottom: 16px;
+        }
+
+        .value-card-bullets {
+            list-style: disc;
+            padding-left: 20px;
+            color: #92400e;
+        }
+
+        .value-card-bullets li {
+            margin-bottom: 4px;
+        }
+
+        /* Detail Cards */
+        .detail-grid {
+            display: grid;
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        @media (min-width: 768px) {
+            .detail-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .detail-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .detail-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .detail-card-desc {
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .detail-card-bullets {
+            list-style: disc;
+            padding-left: 20px;
+            color: #374151;
+        }
+
+        .detail-card-bullets li {
+            margin-bottom: 4px;
+        }
+
+
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Icon styles */
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+
+        .icon-lg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .hero-content {
+                align-items: flex-start;
+            }
+
+            .content-section {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div>
+                    <h1>寶隆產品登錄與客戶管理視覺化流程</h1>
+                    <p>以「產品序號（SN）」為核心，從入庫、出貨、通路銷售、到客戶保固登錄與售後服務，打造資料可追蹤、服務可驗證、決策可量化的端到端流程。</p>
+                    <div class="badges">
+                        <span class="badge">SN碼溯源</span>
+                        <span class="badge">CRM整合</span>
+                        <span class="badge">營運數據決策</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Four Phases Overview -->
+        <section class="phases">
+            <div class="phase-card p1">
+                <div class="phase-title">
+                    <i data-lucide="scan-barcode" class="icon-lg"></i>
+                    第一階段
+                </div>
+                <div class="phase-subtitle">產品入庫與資訊綁定</div>
+                <ul class="phase-points">
+                    <li>供應商貼SN碼</li>
+                    <li>倉儲掃碼入庫</li>
+                    <li>建立產品資料庫</li>
+                </ul>
+            </div>
+            <div class="phase-card p2">
+                <div class="phase-title">
+                    <i data-lucide="truck" class="icon-lg"></i>
+                    第二階段
+                </div>
+                <div class="phase-subtitle">產品出貨與通路追蹤</div>
+                <ul class="phase-points">
+                    <li>出貨掃碼</li>
+                    <li>流向追蹤</li>
+                    <li>經銷／建案綁定</li>
+                </ul>
+            </div>
+            <div class="phase-card p3">
+                <div class="phase-title">
+                    <i data-lucide="shield-check" class="icon-lg"></i>
+                    第三階段
+                </div>
+                <div class="phase-subtitle">客戶登錄與保固管理</div>
+                <ul class="phase-points">
+                    <li>客戶掃碼或上網登錄</li>
+                    <li>後台驗證比對</li>
+                    <li>資料整合入CRM</li>
+                </ul>
+            </div>
+            <div class="phase-card p4">
+                <div class="phase-title">
+                    <i data-lucide="bar-chart-3" class="icon-lg"></i>
+                    第四階段
+                </div>
+                <div class="phase-subtitle">售後服務與數據應用</div>
+                <ul class="phase-points">
+                    <li>客服快速查詢</li>
+                    <li>行銷分群推播</li>
+                    <li>營運決策分析</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="separator"></div>
+
+        <!-- NEW: Flowchart Section -->
+        <section id="flowchart-section" class="content-section">
+            <h2><i data-lucide="git-merge" class="icon-lg"></i>流程圖</h2>
+            <div class="diagram">
+                <div class="diagram-grid">
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="scan-barcode" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">貼SN碼</div>
+                                <div class="diagram-step-sub">供應商</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="package-open" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">掃碼入庫</div>
+                                <div class="diagram-step-sub">倉儲</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="database" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">建立資料庫</div>
+                                <div class="diagram-step-sub">系統</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="truck" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">出貨掃碼</div>
+                                <div class="diagram-step-sub">倉儲</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="building-2" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">流向追蹤</div>
+                                <div class="diagram-step-sub">系統</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="users" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">銷售/建案綁定</div>
+                                <div class="diagram-step-sub">經銷/業務</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="globe" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">客戶登錄</div>
+                                <div class="diagram-step-sub">官網</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="shield-check" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">驗證/保固</div>
+                                <div class="diagram-step-sub">系統</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="database" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">整合CRM</div>
+                                <div class="diagram-step-sub">系統</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="headphones" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">售後服務</div>
+                                <div class="diagram-step-sub">客服</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="megaphone" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">行銷分群</div>
+                                <div class="diagram-step-sub">行銷</div>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="icon arrow-right"></i>
+                    </div>
+                    <div class="diagram-step">
+                        <div class="diagram-step-content">
+                            <i data-lucide="line-chart" class="icon"></i>
+                            <div>
+                                <div class="diagram-step-title">營運決策</div>
+                                <div class="diagram-step-sub">決策者</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NEW: Swimlane Section -->
+        <section id="swimlane-section" class="content-section">
+            <h2><i data-lucide="layout-list" class="icon-lg"></i>泳道圖</h2>
+            <div class="swimlane-note">
+                此泳道圖清晰地展示了不同角色（如供應商、倉儲、系統、客戶等）在整個流程中各自負責的任務，以及任務之間的橫向關聯。
+            </div>
+            <div class="swimlane">
+                <div class="swimlane-container">
+                    <div class="swimlane-row">
+                        <div class="swimlane-actor bg-sky">
+                            <i data-lucide="scan-barcode" class="icon"></i>
+                            供應商
+                        </div>
+                        <div class="swimlane-items">
+                            <div class="swimlane-item">貼SN碼</div>
+                        </div>
+                    </div>
+                    <div class="swimlane-row">
+                        <div class="swimlane-actor bg-emerald">
+                            <i data-lucide="package-open" class="icon"></i>
+                            倉儲
+                        </div>
+                        <div class="swimlane-items">
+                            <div class="swimlane-item">掃碼入庫</div>
+                            <div class="swimlane-item">出貨掃碼</div>
+                        </div>
+                    </div>
+                    <div class="swimlane-row">
+                        <div class="swimlane-actor bg-indigo">
+                            <i data-lucide="database" class="icon"></i>
+                            系統
+                        </div>
+                        <div class="swimlane-items">
+                            <div class="swimlane-item">產品資料庫</div>
+                            <div class="swimlane-item">流向追蹤</div>
+                            <div class="swimlane-item">驗證/保固</div>
+                            <div class="swimlane-item">整合CRM</div>
+                        </div>
+                    </div>
+                    <div class="swimlane-row">
+                        <div class="swimlane-actor bg-amber">
+                            <i data-lucide="store" class="icon"></i>
+                            經銷/建案
+                        </div>
+                        <div class="swimlane-items">
+                            <div class="swimlane-item">銷售/初步綁定</div>
+                            <div class="swimlane-item">建案批次綁定</div>
+                        </div>
+                    </div>
+                    <div class="swimlane-row">
+                        <div class="swimlane-actor bg-rose">
+                            <i data-lucide="globe" class="icon"></i>
+                            客戶/官網
+                        </div>
+                        <div class="swimlane-items">
+                            <div class="swimlane-item">掃碼或官網登錄</div>
+                            <div class="swimlane-item">顯示保固</div>
+                        </div>
+                    </div>
+                    <div class="swimlane-row">
+                        <div class="swimlane-actor bg-teal">
+                            <i data-lucide="users" class="icon"></i>
+                            客服/行銷/決策
+                        </div>
+                        <div class="swimlane-items">
+                            <div class="swimlane-item">客服查詢</div>
+                            <div class="swimlane-item">行銷分群</div>
+                            <div class="swimlane-item">營運決策</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Value Section -->
+        <section id="value-section" class="content-section">
+            <h2><i data-lucide="gem" class="icon-lg"></i>管理價值</h2>
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-card-header">
+                        <i data-lucide="truck" class="icon-lg"></i>
+                        <div class="value-card-title">效率提升</div>
+                        <div class="value-card-tag">第一/二階段</div>
+                    </div>
+                    <div class="value-card-desc">入/出庫掃碼與批次綁定減少人工輸入錯誤與盤點時間。</div>
+                    <ul class="value-card-bullets">
+                        <li>雙掃碼驗證</li>
+                        <li>建案批量匯入</li>
+                        <li>標準化SOP</li>
+                    </ul>
+                </div>
+                <div class="value-card">
+                    <div class="value-card-header">
+                        <i data-lucide="shield-check" class="icon-lg"></i>
+                        <div class="value-card-title">客戶數據沉澱</div>
+                        <div class="value-card-tag">第三階段</div>
+                    </div>
+                    <div class="value-card-desc">SN碼對應客戶與保固，形成單一客戶視圖（SCV）。</div>
+                    <ul class="value-card-bullets">
+                        <li>官網驗證比對</li>
+                        <li>保固狀態即時回饋</li>
+                        <li>CRM整合</li>
+                    </ul>
+                </div>
+                <div class="value-card">
+                    <div class="value-card-header">
+                        <i data-lucide="megaphone" class="icon-lg"></i>
+                        <div class="value-card-title">行銷精準化</div>
+                        <div class="value-card-tag">第四階段（行銷）</div>
+                    </div>
+                    <div class="value-card-desc">依型號/保固期/區域分群推播，提升再購率與維護收入。</div>
+                    <ul class="value-card-bullets">
+                        <li>保養提醒</li>
+                        <li>交叉銷售/加值</li>
+                        <li>流失預警</li>
+                    </ul>
+                </div>
+                <div class="value-card">
+                    <div class="value-card-header">
+                        <i data-lucide="line-chart" class="icon-lg"></i>
+                        <div class="value-card-title">決策支持</div>
+                        <div class="value-card-tag">第四階段（決策）</div>
+                    </div>
+                    <div class="value-card-desc">掌握熱銷區、通路表現、登錄率，作為產銷規劃與資源配置依據。</div>
+                    <ul class="value-card-bullets">
+                        <li>區域熱點</li>
+                        <li>通路KPI</li>
+                        <li>登錄率與轉化</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detail Cards -->
+        <section class="detail-grid">
+            <div class="detail-card">
+                <div class="detail-card-header">
+                    <i data-lucide="box" class="icon-lg"></i>
+                    供應商/倉儲
+                </div>
+                <div class="detail-card-desc">透過SN碼自源頭建構產品唯一身分，入庫即綁定型號與批次，降低盤點與追溯成本。</div>
+                <ul class="detail-card-bullets">
+                    <li>SN碼產生與貼標SOP</li>
+                    <li>到貨/入庫雙掃碼</li>
+                    <li>入庫時戳記與責任歸屬</li>
+                </ul>
+            </div>
+            <div class="detail-card">
+                <div class="detail-card-header">
+                    <i data-lucide="store" class="icon-lg"></i>
+                    經銷/建案
+                </div>
+                <div class="detail-card-desc">出貨掃碼形成產品旅程，銷售時可初步綁定客戶，建案批量匯入提升效率。</div>
+                <ul class="detail-card-bullets">
+                    <li>通路出貨記錄</li>
+                    <li>建案模組批次綁定</li>
+                    <li>交屋後最終登錄</li>
+                </ul>
+            </div>
+            <div class="detail-card">
+                <div class="detail-card-header">
+                    <i data-lucide="database" class="icon-lg"></i>
+                    網站/CRM/客服
+                </div>
+                <div class="detail-card-desc">官網驗證配對提升資料正確性，CRM集中客戶/產品/維修紀錄，客服據以快速服務。</div>
+                <ul class="detail-card-bullets">
+                    <li>官網雙資料庫驗證</li>
+                    <li>CRM單一客戶視圖</li>
+                    <li>工單/維修閉環</li>
+                </ul>
+            </div>
+        </section>
+
+
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Add intersection observer for animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.phase-card, .detail-card, .value-card, .diagram-step').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add click animation to cards
+        document.querySelectorAll('.phase-card, .detail-card, .value-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
