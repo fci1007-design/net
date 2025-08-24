@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>妍發科技政府補助計畫專案規劃建議</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .flow-step {
+            position: relative;
+        }
+        .flow-step::after {
+            content: '';
+            position: absolute;
+            bottom: -2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 2rem;
+            background-color: #6366f1; /* Indigo-500 */
+        }
+        .flow-step:last-child::after {
+            display: none;
+        }
+        .flow-step::before {
+            content: '';
+            position: absolute;
+            bottom: -2.5rem;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid #6366f1;
+            border-bottom: 2px solid #6366f1;
+        }
+        .flow-step:last-child::before {
+            display: none;
+        }
+        /* Custom animation for on-scroll fade-in */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Font sizing for better readability */
+        h1 { font-size: clamp(1.5rem, 5vw, 2.5rem); }
+        h2 { font-size: clamp(1.25rem, 4vw, 2rem); }
+        h3 { font-size: clamp(1rem, 3vw, 1.25rem); }
+        p, li, table { font-size: clamp(0.875rem, 2.5vw, 1.125rem); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-800 antialiased leading-relaxed">
+
+    <!-- Header Section -->
+    <header class="bg-indigo-700 text-white shadow-lg py-8 px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto text-center">
+            <h1 class="font-bold mb-2">
+                專案規劃｜妍發科技
+            </h1>
+            <p class="opacity-90">
+                政府補助計畫申請策略與執行藍圖
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Section 1: 劉教授團隊角色與專案管理方式 -->
+        <section id="section-1" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-10 border-t-8 border-indigo-500 fade-in-section">
+            <h2 class="font-bold text-indigo-600 mb-4 border-b pb-2">一、劉教授團隊角色與協助方式</h2>
+            <p class="mb-4 text-gray-600">
+                劉教授團隊協助發想、分析策略、內容撰寫；
+                妍發科技同仁負責行政事務、申請遞件與政府聯繫。
+                初步鎖定經濟部產業發展署計畫，並同步關注其他部會補助機會。
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                <div class="bg-blue-50 rounded-2xl p-6 shadow-md border-2 border-blue-200">
+                    <h3 class="font-bold text-blue-700 mb-2">需求與選題</h3>
+                    <p class="text-sm text-gray-600">從市場與政策角度，引導腦力激盪，鎖定最適專案主題。</p>
+                </div>
+                <div class="bg-blue-50 rounded-2xl p-6 shadow-md border-2 border-blue-200">
+                    <h3 class="font-bold text-blue-700 mb-2">文件與計畫書</h3>
+                    <p class="text-sm text-gray-600">協助編撰計畫書，突顯技術創新與商業模式；指導準備資格文件。</p>
+                </div>
+                <div class="bg-blue-50 rounded-2xl p-6 shadow-md border-2 border-blue-200">
+                    <h3 class="font-bold text-blue-700 mb-2">審查與應對</h3>
+                    <p class="text-sm text-gray-600">協助製作簡報、模擬Q&A，協助投件與審查流程順暢。</p>
+                </div>
+                <div class="bg-blue-50 rounded-2xl p-6 shadow-md border-2 border-blue-200">
+                    <h3 class="font-bold text-blue-700 mb-2">資源串聯</h3>
+                    <p class="text-sm text-gray-600">協助媒合外部技術、學研資源與異業夥伴。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 工作流程建議 - Flowchart -->
+        <section id="section-2" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-10 border-t-8 border-green-500 fade-in-section">
+            <h2 class="font-bold text-green-600 mb-6 border-b pb-2">二、工作流程建議</h2>
+            <div class="flex flex-col items-center justify-center space-y-16 mt-12">
+                <!-- Step 1 -->
+                <div class="bg-green-100 rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center w-full sm:w-2/3 md:w-1/2 flow-step">
+                    <h3 class="font-bold text-green-700 mb-2">啟動與需求釐清</h3>
+                    <p class="text-gray-600">劉教授團隊引導需求分析與討論，妍發提供背景資料，共同確認企劃方向。</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-green-100 rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center w-full sm:w-2/3 md:w-1/2 flow-step">
+                    <h3 class="font-bold text-green-700 mb-2">選題與發想</h3>
+                    <p class="text-gray-600">劉教授團隊發想，妍發參與，聚焦可行專案主題，透過視訊或實體討論確認。</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-green-100 rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center w-full sm:w-2/3 md:w-1/2 flow-step">
+                    <h3 class="font-bold text-green-700 mb-2">計畫書撰寫</h3>
+                    <p class="text-gray-600">劉教授團隊主責撰寫，妍發提供技術與財務資料，協力完成計畫書與預算。</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="bg-green-100 rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center w-full sm:w-2/3 md:w-1/2 flow-step">
+                    <h3 class="font-bold text-green-700 mb-2">審查準備與投件</h3>
+                    <p class="text-gray-600">劉教授團隊協助簡報內容製作與Q&A模擬，妍發負責最終投件與窗口聯絡。</p>
+                </div>
+                <!-- Step 5 -->
+                <div class="bg-green-100 rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center w-full sm:w-2/3 md:w-1/2 flow-step">
+                    <h3 class="font-bold text-green-700 mb-2">初複審應對</h3>
+                    <p class="text-gray-600">妍發代表報告，劉教授團隊支援，回答委員提問。</p>
+                </div>
+                <!-- Step 6 -->
+                <div class="bg-green-100 rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center w-full sm:w-2/3 md:w-1/2">
+                    <h3 class="font-bold text-green-700 mb-2">簽約、管考與結案</h3>
+                    <p class="text-gray-600">妍發主導行政流程，劉教授團隊可提供相關諮詢建議。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: 各計劃分析 -->
+        <section id="section-3" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-10 border-t-8 border-orange-500 fade-in-section">
+            <h2 class="font-bold text-orange-600 mb-6 border-b pb-2">三、各計劃分析</h2>
+            <p class="mb-6 text-gray-600">
+                以下針對經濟部產業發展署各類計畫的目的、計畫內涵與審查重點進行整理，便於妍發科技在選題時快速掌握重點。
+            </p>
+            <div class="overflow-x-auto rounded-lg shadow-inner border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-orange-100">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-orange-700 uppercase tracking-wider">計畫類別</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-orange-700 uppercase tracking-wider">計畫目的</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-orange-700 uppercase tracking-wider">計畫內涵</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-orange-700 uppercase tracking-wider">審查重點</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-orange-700 uppercase tracking-wider">送件期限</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-orange-700 uppercase tracking-wider">補助金額</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 text-gray-700">
+                        <tr class="hover:bg-orange-50 transition-colors">
+                            <td class="px-3 py-4">產業高值計畫</td>
+                            <td class="px-3 py-4">鼓勵業者切入高端市場，提高附加價值。</td>
+                            <td class="px-3 py-4">掌握關鍵技術、開發高單價或銷售倍增產品。</td>
+                            <td class="px-3 py-4">注重切入高端市場潛力、技術創新及產業帶動效應。</td>
+                            <td class="px-3 py-4">隨到隨審</td>
+                            <td class="px-3 py-4">補助比率上限40%，計畫補助款比率最高50%</td>
+                        </tr>
+                        <tr class="hover:bg-orange-50 transition-colors">
+                            <td class="px-3 py-4">創新優化計畫</td>
+                            <td class="px-3 py-4">鼓勵指標性廠商掌握關鍵設備、材料及系統整合能力，建立整廠輸出體系。</td>
+                            <td class="px-3 py-4">開發超越國內水準的關鍵材料、零組件與設備，或打造 Total Solution 整體系統解決方案。</td>
+                            <td class="px-3 py-4">評估關鍵技術領先、上下游整合能力與營運創新。</td>
+                            <td class="px-3 py-4">隨到隨審</td>
+                            <td class="px-3 py-4">補助比率上限40%，計畫補助款比率最高50%</td>
+                        </tr>
+                        <tr class="hover:bg-orange-50 transition-colors">
+                            <td class="px-3 py-4">新興育成計畫</td>
+                            <td class="px-3 py-4">因應政策與產業需求，鼓勵開發替代性的主流新興產品或服務。</td>
+                            <td class="px-3 py-4">自行或跨界合作或運用學研成果發展新興產品或服務，要求具有技術或創新服務含量。</td>
+                            <td class="px-3 py-4">注重新興產業形成與市場示範性、技術或服務的創新與場域試煉驗證。</td>
+                            <td class="px-3 py-4">隨到隨審</td>
+                            <td class="px-3 py-4">補助比率上限40%，計畫補助款比率最高50%</td>
+                        </tr>
+                        <tr class="hover:bg-orange-50 transition-colors">
+                            <td class="px-3 py-4">主題式研發計畫</td>
+                            <td class="px-3 py-4">配合政策，由政府定期公告研發主題，鼓勵企業開發符合主題的技術、產品或服務。</td>
+                            <td class="px-3 py-4">依政府公告的主題與時程提案，內容必須符合規格並規劃技術研發與試驗場域。</td>
+                            <td class="px-3 py-4">評估是否切題、時程掌握與跨產業連結能力。</td>
+                            <td class="px-3 py-4">依公告日期截止收件</td>
+                            <td class="px-3 py-4">補助比率40%以上，計畫補助款比率最高50%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Section 4: 適用計畫綜合分析 -->
+        <section id="section-4" class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-10 border-t-8 border-violet-500 fade-in-section">
+            <h2 class="font-bold text-violet-600 mb-6 border-b pb-2">四、適用計畫綜合分析</h2>
+            <p class="mb-6 text-gray-600">
+                以下以妍發科技（蔬菜工廠、希望導入 AI 並開拓沙烏地阿拉伯市場）的角度，分析各類計畫的優缺點與適用性：
+            </p>
+            <div class="overflow-x-auto rounded-lg shadow-inner border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-violet-100">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-violet-700 uppercase tracking-wider whitespace-nowrap">計畫類別</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-violet-700 uppercase tracking-wider">對妍發科技的優點</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-violet-700 uppercase tracking-wider">對妍發科技的缺點</th>
+                            <th scope="col" class="px-3 py-3 text-left font-semibold text-violet-700 uppercase tracking-wider">適用性建議</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 text-gray-700">
+                        <tr class="hover:bg-violet-50 transition-colors">
+                            <td class="px-3 py-4 whitespace-nowrap">產業高值計畫</td>
+                            <td class="px-3 py-4">強調切入高端產品市場，鼓勵透過掌握關鍵技術開發高單價或倍增銷售量的產品；若妍發科技利用 AI 提升蔬菜品質、開發高附加價蔬果，能提高單價並塑造高值形象。</td>
+                            <td class="px-3 py-4">重視高單價、高成長，須證明產品能切入高端市場及帶動產業鏈；蔬菜屬民生產品，若定位不夠高端，審查不易；對出口整廠模式支援較少。</td>
+                            <td class="px-3 py-4">適合規劃高營養、高附加價蔬菜或加工品，聚焦產品價值提升；若主要目標是輸出整廠技術或系統，適用性較低。</td>
+                        </tr>
+                        <tr class="hover:bg-violet-50 transition-colors">
+                            <td class="px-3 py-4 whitespace-nowrap">創新優化計畫</td>
+                            <td class="px-3 py-4">鼓勵掌握關鍵技術、建構完整供應鏈，甚至提供整廠 Total Solution 海外輸出；妍發科技導入 AI 建立智慧化蔬菜工廠，可提出整廠輸出沙烏地阿拉伯的方案，符合系統整合者的要求。</td>
+                            <td class="px-3 py-4">需展現技術領先與完整供應鏈整合能力；研發與系統整合成本較高，對中小企業資源是一大挑戰。</td>
+                            <td class="px-3 py-4">與妍發科技目標最契合，可利用 AI 結合工程、設備與營運模式，提出智慧蔬菜工廠的全套方案，並規劃海外輸出。**推薦作為優先申請計畫**。</td>
+                        </tr>
+                        <tr class="hover:bg-violet-50 transition-colors">
+                            <td class="px-3 py-4 whitespace-nowrap">新興育成計畫</td>
+                            <td class="px-3 py-4">鼓勵開發新興產品或服務，並具市場示範性；若妍發科技結合農業與 AI 開創新興服務（如植物工廠 SaaS 平台或智慧農業顧問），可能符合計畫宗旨。</td>
+                            <td class="px-3 py-4">重視「新興產業」與示範場域；可能需先在國內試煉驗證後再推廣海外，且補助聚焦在技術或創新服務內容，不一定支援整廠輸出。</td>
+                            <td class="px-3 py-4">適合研發新型態的智慧農業服務或跨界合作；若聚焦出口整廠設備，適用性較中等。</td>
+                        </tr>
+                        <tr class="hover:bg-violet-50 transition-colors">
+                            <td class="px-3 py-4 whitespace-nowrap">主題式研發計畫</td>
+                            <td class="px-3 py-4">政府依政策方向公告特定研發主題，補助比率可高於 40%；若未來公告的主題與智慧農業或沙烏地市場相關，申請成功機會大，補助力度也較高。</td>
+                            <td class="px-3 py-4">主題不定期公告，必須符合公告題目及技術規格；須在公告期限內完成提案，計畫時程難以自行掌控。</td>
+                            <td class="px-3 py-4">適用性取決於政府公告主題是否與「AI 智慧農業」或「海外糧食安全」相關；可保持關注，但不宜依賴此計畫作為主要規劃。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="mt-6 text-gray-600">
+                透過上述比較，妍發科技若要以智慧化蔬菜工廠開拓沙烏地阿拉伯市場，「創新優化計畫」最貼近其全方位輸出與技術整合需求；產業高值計畫與新興育成計畫可作為產品價值提升或新興服務開發的備選；主題式研發計畫則需視政府公告主題而定。
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white text-center p-4 mt-12">
+        <p class="opacity-70">&copy; 2025 劉教授顧問團隊 All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Intersection Observer to trigger fade-in animation
+        document.addEventListener("DOMContentLoaded", function() {
+            const sections = document.querySelectorAll(".fade-in-section");
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.2 // Trigger when 20% of the section is visible
+            };
+            
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observer.unobserve(entry.target); // Stop observing once animated
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
