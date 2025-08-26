@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>整合行銷策略藍圖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #50E3C2;
+            --background-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --heading-color: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-top: 1rem;
+            animation: fadeInUp 1s ease-in-out 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            margin-bottom: 3rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .card-content {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            overflow-y: auto;
+            border-radius: 12px;
+        }
+        
+        .card:hover .card-content {
+            display: block;
+            opacity: 1;
+        }
+
+        .card-content h4 {
+            color: var(--secondary-color);
+            margin-top: 0;
+        }
+        
+        /* Timeline styles */
+        .timeline-container {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .timeline-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        .timeline {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            height: 300px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary-color);
+            top: 50%;
+            transform: translateY(-50%) scaleX(0);
+            transform-origin: left;
+            transition: transform 1s ease-out;
+            border-radius: 2px;
+        }
+        
+        .timeline.active .timeline-line {
+            transform: translateY(-50%) scaleX(1);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid var(--primary-color);
+            transition: transform 0.5s ease-out, opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .timeline.active .timeline-dot {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .timeline-phase {
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: -60px;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.8s;
+        }
+
+        .timeline.active .timeline-phase {
+            opacity: 1;
+        }
+        
+        .timeline-strategy {
+            position: absolute;
+            width: 150px;
+            background-color: var(--card-bg);
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .timeline.active .timeline-strategy {
+            opacity: 1;
+        }
+        
+        .strategy-group {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .strategy-group.top {
+            top: 50%;
+            transform: translateY(-100%) translateY(-100px);
+        }
+
+        .strategy-group.bottom {
+            top: 50%;
+            transform: translateY(0) translateY(80px);
+        }
+        
+        /* Positions for timeline elements */
+        #dot-1 { left: 10%; transition-delay: 0.3s; }
+        #dot-2 { left: 35%; transition-delay: 0.6s; }
+        #dot-3 { left: 65%; transition-delay: 0.9s; }
+        #dot-4 { left: 90%; transition-delay: 1.2s; }
+        
+        #phase-1 { left: 10%; transform: translateX(-50%); transition-delay: 0.8s; }
+        #phase-2 { left: 35%; transform: translateX(-50%); transition-delay: 1.1s; }
+        #phase-3 { left: 65%; transform: translateX(-50%); transition-delay: 1.4s; }
+        #phase-4 { left: 90%; transform: translateX(-50%); transition-delay: 1.7s; }
+        
+        #strategy-group-1 { left: 10%; transform: translateX(-50%); transition-delay: 1.0s; }
+        #strategy-group-2 { left: 35%; transform: translateX(-50%); transition-delay: 1.3s; }
+        #strategy-group-3 { left: 65%; transform: translateX(-50%); transition-delay: 1.6s; }
+        #strategy-group-4 { left: 90%; transform: translateX(-50%); transition-delay: 1.9s; }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            header p { font-size: 1rem; }
+            .card-grid { grid-template-columns: 1fr; }
+            .card { height: auto; }
+            .timeline { height: 600px; width: 80%; }
+            .timeline-line { display: none; }
+            .timeline-dot { display: none; }
+            .timeline-phase { position: relative; top: auto; left: auto; margin-top: 0; margin-bottom: 2rem; transform: none; }
+            .timeline-strategy { position: relative; top: auto; left: auto; transform: none; margin-bottom: 1rem; }
+            .strategy-group { position: relative; top: auto; left: auto; transform: none; margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>整合行銷策略藍圖</h1>
+        <p>一份給您的行銷成長指南，揭示每一個投資背後的策略目的。</p>
+    </header>
+
+    <section id="strategies">
+        <div class="container">
+            <h2 class="section-title">行銷手段分析</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>內容行銷</h3>
+                    <p>提供價值、建立信任，吸引目標客群。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>透過部落格、影片、電子書提供有價值資訊。</p>
+                        <h4>效果</h4><p>建立品牌權威、提升SEO。</p>
+                        <h4>優缺點</h4><p>優：成本低、成果持久。缺：見效慢、需長期投入。</p>
+                        <h4>注意事項</h4><p>內容需真正解決問題，避免推銷。</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>數位廣告</h3>
+                    <p>付費且能快速接觸大量受眾的行銷手段。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>在社群平台、搜尋引擎投放付費廣告。</p>
+                        <h4>效果</h4><p>快速帶來流量、刺激短期銷售。</p>
+                        <h4>優缺點</h4><p>優：精準鎖定、數據量化。缺：成本波動、易廣告疲勞。</p>
+                        <h4>注意事項</h4><p>持續優化文案，監控成效。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>買新聞/公關操作</h3>
+                    <p>透過媒體報導，提升品牌公信力。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>發布新聞稿、舉辦記者會，讓品牌曝光。</p>
+                        <h4>效果</h4><p>提升公信力、創造話題。</p>
+                        <h4>優缺點</h4><p>優：具說服力、成本相對低。缺：難以完全掌控。</p>
+                        <h4>注意事項</h4><p>內容需具新聞價值，避免商業化。</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>FB/IG 社群經營</h3>
+                    <p>與粉絲建立社群連結，提升品牌黏著度。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>經營官方帳號，透過發文、互動等與粉絲連結。</p>
+                        <h4>效果</h4><p>提升品牌黏著度、創造口碑。</p>
+                        <h4>優缺點</h4><p>優：溝通直接、成本較低。缺：成效難立即轉換。</p>
+                        <h4>注意事項</h4><p>內容有趣，避免只推銷。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>短影音</h3>
+                    <p>快速、直觀且高娛樂性的視覺傳播。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>製作簡短、具娛樂性的影片在平台發布。</p>
+                        <h4>效果</h4><p>病毒式傳播、高互動率。</p>
+                        <h4>優缺點</h4><p>優：製作門檻低。缺：難以掌握是否爆紅。</p>
+                        <h4>注意事項</h4><p>抓住前3秒、追蹤流行趨勢。</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>SEO / 關鍵字廣告</h3>
+                    <p>讓潛在客戶在主動搜尋時找到您。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>SEO: 優化網站結構。<br>關鍵字廣告: 購買特定關鍵字。</p>
+                        <h4>效果</h4><p>SEO: 穩定免費流量。<br>關鍵字廣告: 快速見效。</p>
+                        <h4>優缺點</h4><p>優：精準、高意圖。<br>缺：SEO需時間、廣告成本高。</p>
+                        <h4>注意事項</h4><p>SEO需長期投入，廣告需謹慎選詞。</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>網紅/KOL 合作</h3>
+                    <p>藉由影響力人士，快速觸及目標客群。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>與具影響力者合作，讓其推廣產品。</p>
+                        <h4>效果</h4><p>精準觸及、高轉換率。</p>
+                        <h4>優缺點</h4><p>優：高說服力、創造話題。<br>缺：成本高、需謹慎選擇。</p>
+                        <h4>注意事項</h4><p>評估合作對象的調性與粉絲品質。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>廣告 (傳統媒體)</h3>
+                    <p>在傳統管道上，進行大規模品牌曝光。</p>
+                    <div class="card-content">
+                        <h4>操作方式</h4><p>購買電視、報紙、戶外看板等版位。</p>
+                        <h4>效果</h4><p>快速建立廣泛知名度。</p>
+                        <h4>優缺點</h4><p>優：公信力高、覆蓋廣。<br>缺：成本昂貴、難以追蹤。</p>
+                        <h4>注意事項</h4><p>精準設定目標與預算，避免浪費。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline-section" class="timeline-container">
+        <h2 class="timeline-title">行銷策略實施時機</h2>
+        <p class="timeline-subtitle">將您的行銷投資，視為一場有計畫的成長之旅</p>
+        <div class="timeline">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-dot" id="dot-1"></div>
+            <div class="timeline-phase" id="phase-1">
+                <p>品牌建立期</p>
+            </div>
+            <div class="strategy-group top" id="strategy-group-1">
+                <div class="timeline-strategy">內容行銷</div>
+                <div class="timeline-strategy">SEO</div>
+                <div class="timeline-strategy">社群經營</div>
+            </div>
+
+            <div class="timeline-dot" id="dot-2"></div>
+            <div class="timeline-phase" id="phase-2">
+                <p>快速導流期</p>
+            </div>
+            <div class="strategy-group bottom" id="strategy-group-2">
+                <div class="timeline-strategy">數位廣告</div>
+                <div class="timeline-strategy">關鍵字廣告</div>
+            </div>
+
+            <div class="timeline-dot" id="dot-3"></div>
+            <div class="timeline-phase" id="phase-3">
+                <p>擴散爆發期</p>
+            </div>
+            <div class="strategy-group top" id="strategy-group-3">
+                <div class="timeline-strategy">短影音</div>
+                <div class="timeline-strategy">KOL合作</div>
+            </div>
+
+            <div class="timeline-dot" id="dot-4"></div>
+            <div class="timeline-phase" id="phase-4">
+                <p>聲量鞏固期</p>
+            </div>
+            <div class="strategy-group bottom" id="strategy-group-4">
+                <div class="timeline-strategy">買新聞</div>
+                <div class="timeline-strategy">傳統廣告</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timeline = document.querySelector('.timeline');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        timeline.classList.add('active');
+                        observer.unobserve(timeline); 
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(timeline);
+        });
+    </script>
+</body>
+</html>
