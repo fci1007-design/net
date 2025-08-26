@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>整合行銷手段分析總覽</title>
+    
+    <!-- Google Fonts: Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- 
+        Note on Animation: 
+        To achieve the desired "Framer Motion" style of gentle micro-animations 
+        while keeping this a simple, self-contained HTML file,
+        we are using pure CSS Keyframes and Transitions.
+        This provides the requested visual effect (fade-in, float-up, pulse) 
+        without the need for a JavaScript framework like React.
+    -->
+
+    <style>
+        /* --- 1. Global & Variables --- */
+        :root {
+            --color-bg: #FFFFFF;
+            --color-bg-alt: #F8F9FA;
+            --color-text: #343A40;
+            --color-text-light: #6C757D;
+            --color-border: #E9ECEF;
+            
+            --color-accent-blue: #4A90E2;
+            --color-accent-purple: #9013FE;
+            --color-accent-orange: #F5A623;
+            --color-accent-red: #D0021B;
+
+            --font-family: 'Noto Sans TC', sans-serif;
+            --border-radius: 12px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- 2. Layout & Container --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 6rem;
+        }
+        
+        /* --- 3. Typography & Big Visuals --- */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 6rem); /* Responsive large font */
+            font-weight: 900;
+            color: var(--color-text);
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .header-subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 5rem auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1.5rem;
+        }
+
+        .giant-number {
+            font-size: 8rem;
+            font-weight: 900;
+            color: var(--color-accent-blue);
+            opacity: 0.1;
+            line-height: 1;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        h3 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        h4 i {
+            color: var(--color-accent-blue);
+        }
+
+        /* --- 4. Card Design --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            
+            /* Animation Setup */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .card-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+        }
+        .card-content li {
+            margin-bottom: 0.75rem;
+        }
+        .card-content strong {
+            color: var(--color-text);
+            font-weight: 500;
+            min-width: 70px;
+            display: inline-block;
+        }
+        
+        /* Staggered Animation Delays */
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+        .card:nth-child(5) { animation-delay: 0.4s; }
+        .card:nth-child(6) { animation-delay: 0.5s; }
+        .card:nth-child(7) { animation-delay: 0.6s; }
+        /* Add more if needed */
+
+
+        /* --- 5. Strategy Section Design --- */
+        .strategy-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .strategy-card {
+            background-color: var(--color-bg-alt);
+            border: 1px solid var(--color-border);
+            border-left: 5px solid var(--color-accent-blue); /* Default border color */
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        .strategy-card:nth-child(2) { animation-delay: 0.2s; }
+        .strategy-card:nth-child(3) { animation-delay: 0.4s; }
+
+        .strategy-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .strategy-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .strategy-header p {
+            font-size: 1rem;
+            color: var(--color-text-light);
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .strategy-body p {
+            font-size: 1.05rem;
+        }
+        
+        /* Accent Colors for Strategy Cards */
+        #strategy-always-on { border-left-color: var(--color-accent-blue); }
+        #strategy-always-on .strategy-icon { color: var(--color-accent-blue); }
+        
+        #strategy-campaign { border-left-color: var(--color-accent-purple); }
+        #strategy-campaign .strategy-icon { color: var(--color-accent-purple); }
+        
+        #strategy-event { border-left-color: var(--color-accent-red); }
+        #strategy-event .strategy-icon { color: var(--color-accent-red); }
+
+        .tools-combo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .tool-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all var(--transition-speed) ease;
+        }
+        .tool-pill i {
+            color: var(--color-text-light);
+        }
+        
+        /* Node with Pulse Effect */
+        .strategy-icon {
+            position: relative;
+        }
+        .strategy-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: currentColor;
+            opacity: 0.15;
+            animation: pulse 2s infinite ease-out;
+            z-index: -1;
+        }
+
+
+        /* --- 6. Animations --- */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.15;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.6);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.6);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        
+        <header>
+            <h2>行銷手段的操作、效果、優缺點與注意事項</h2>
+            <p class="header-subtitle"></p>
+        </header>
+
+        <!-- =================================================================== -->
+        <!-- PART 1: MARKETING TOOLS ANALYSIS                                  -->
+        <!-- =================================================================== -->
+        <section id="tools-analysis">
+            <div class="section-header">
+                <div class="giant-number">1</div>
+                <h2>行銷手段特性分析</h2>
+            </div>
+            
+            <h3><i class="fas fa-landmark" style="color: var(--color-accent-orange);"></i> 傳統行銷手段</h3>
+            <div class="card-grid">
+                <!-- Card: TV Ad -->
+                <div class="card">
+                    <h4><i class="fas fa-tv"></i>電視廣告</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>購買時段播放廣告</li>
+                            <li><strong>效果</strong>快速觸及大量受眾</li>
+                            <li><strong>優點</strong>高曝光、品牌建立</li>
+                            <li><strong>缺點</strong>成本高、難追蹤成效</li>
+                            <li><strong>注意事項</strong>注意時段與節目搭配</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: Print Ad -->
+                <div class="card">
+                    <h4><i class="fas fa-newspaper"></i>報紙/雜誌廣告</h4>
+                    <div class="card-content">
+                         <ul>
+                            <li><strong>操作方式</strong>刊登平面廣告</li>
+                            <li><strong>效果</strong>穩定觸及特定族群</li>
+                            <li><strong>優點</strong>可信度高、具權威感</li>
+                            <li><strong>缺點</strong>成效難量化、受眾老化</li>
+                            <li><strong>注意事項</strong>選擇合適媒體與版位</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: PR -->
+                <div class="card">
+                    <h4><i class="fas fa-bullhorn"></i>公關新聞</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>發新聞稿、買版面</li>
+                            <li><strong>效果</strong>提升品牌信任度</li>
+                            <li><strong>優點</strong>有公信力、可擴散</li>
+                            <li><strong>缺點</strong>成本高、控制力低</li>
+                            <li><strong>注意事項</strong>注意內容真實性與媒體關係</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: Physical Event -->
+                <div class="card">
+                    <h4><i class="fas fa-map-marker-alt"></i>實體活動</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>辦展覽、講座、路演</li>
+                            <li><strong>效果</strong>建立深度互動</li>
+                            <li><strong>優點</strong>高參與感、可收集名單</li>
+                            <li><strong>缺點</strong>成本高、執行複雜</li>
+                            <li><strong>注意事項</strong>注意活動流程與人流安排</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 4rem;"><i class="fas fa-globe" style="color: var(--color-accent-purple);"></i> 數位時代行銷手段</h3>
+            <div class="card-grid">
+                <!-- Card: Content Marketing -->
+                <div class="card">
+                    <h4><i class="fas fa-lightbulb"></i>內容行銷</h4>
+                    <div class="card-content">
+                         <ul>
+                            <li><strong>操作方式</strong>撰寫文章、製作圖文/影片</li>
+                            <li><strong>效果</strong>建立信任與專業形象</li>
+                            <li><strong>優點</strong>長期累積、SEO友善</li>
+                            <li><strong>缺點</strong>成效慢、需持續投入</li>
+                            <li><strong>注意事項</strong>注意內容品質與一致性</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: SEM -->
+                <div class="card">
+                    <h4><i class="fas fa-search-dollar"></i>關鍵字廣告 (SEM)</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>Google Ads投放</li>
+                            <li><strong>效果</strong>精準導流</li>
+                            <li><strong>優點</strong>成效可量化、即時見效</li>
+                            <li><strong>缺點</strong>成本高、競爭激烈</li>
+                            <li><strong>注意事項</strong>注意關鍵字選擇與預算控管</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: SEO -->
+                <div class="card">
+                    <h4><i class="fas fa-chart-line"></i>SEO自然排序</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>優化網站結構與內容</li>
+                            <li><strong>效果</strong>長期穩定導流</li>
+                            <li><strong>優點</strong>免費流量、信任度高</li>
+                            <li><strong>缺點</strong>成效慢、技術門檻高</li>
+                            <li><strong>注意事項</strong>注意網站技術與內容更新</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: Social Media -->
+                <div class="card">
+                    <h4><i class="fas fa-users"></i>社群經營</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>發文、互動、直播</li>
+                            <li><strong>效果</strong>建立粉絲關係</li>
+                            <li><strong>優點</strong>成本低、互動性高</li>
+                            <li><strong>缺點</strong>需持續經營、演算法限制</li>
+                            <li><strong>注意事項</strong>注意貼文節奏與互動品質</li>
+                        </ul>
+                    </div>
+                </div>
+                 <!-- Card: KOL -->
+                <div class="card">
+                    <h4><i class="fas fa-star"></i>KOL合作</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>找網紅推薦產品</li>
+                            <li><strong>效果</strong>快速建立信任與口碑</li>
+                            <li><strong>優點</strong>精準觸及目標族群</li>
+                            <li><strong>缺點</strong>成本高、風險控管難</li>
+                            <li><strong>注意事項</strong>注意KOL形象與粉絲輪廓</li>
+                        </ul>
+                    </div>
+                </div>
+                 <!-- Card: Short Video -->
+                <div class="card">
+                    <h4><i class="fas fa-film"></i>短影音行銷</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>製作15~60秒影片</li>
+                            <li><strong>效果</strong>快速吸引注意力</li>
+                            <li><strong>優點</strong>高觸及率、易擴散</li>
+                            <li><strong>缺點</strong>內容壽命短、需創意</li>
+                            <li><strong>注意事項</strong>注意剪輯節奏與平台特性</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card: Advertorial -->
+                <div class="card">
+                    <h4><i class="fas fa-file-invoice-dollar"></i>買新聞 (數位版)</h4>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>操作方式</strong>購買網路新聞版位</li>
+                            <li><strong>效果</strong>提升品牌信任度</li>
+                            <li><strong>優點</strong>有公信力、可擴散</li>
+                            <li><strong>缺點</strong>成本高、控制力低</li>
+                            <li><strong>注意事項</strong>注意媒體選擇與內容安排</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- PART 2: STRATEGIC APPLICATION & TIMING                            -->
+        <!-- =================================================================== -->
+        <section id="strategy-application">
+            <div class="section-header">
+                <div class="giant-number">2</div>
+                <h2>整合策略應用與時機</h2>
+            </div>
+            
+            <div class="strategy-container">
+                
+                <!-- Strategy Card: Always-on -->
+                <div class="strategy-card" id="strategy-always-on">
+                    <div class="strategy-header">
+                        <h3>
+                            <span class="strategy-icon"><i class="fas fa-infinity fa-fw"></i></span>
+                            長期基礎建設 (Always-on)
+                        </h3>
+                        <p>持續經營品牌、累積數位資產、建立長期顧客關係</p>
+                    </div>
+                    <div class="strategy-body">
+                        <p>這是品牌數位經營的鐵三角。內容是核心，為SEO和社群提供養分；SEO負責將有搜尋需求的潛在客戶帶來；社群則用來擴散內容、與粉絲互動、培養忠誠度。三者相輔相成，長期運作能有效降低獲客成本。</p>
+                        <div class="tools-combo">
+                            <span class="tool-pill"><i class="fas fa-chart-line"></i>SEO自然排序</span>
+                            <span class="tool-pill"><i class="fas fa-lightbulb"></i>內容行銷</span>
+                            <span class="tool-pill"><i class="fas fa-users"></i>社群經營</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Card: Campaign-based -->
+                <div class="strategy-card" id="strategy-campaign">
+                    <div class="strategy-header">
+                        <h3>
+                            <span class="strategy-icon"><i class="fas fa-calendar-alt fa-fw"></i></span>
+                            階段性任務 (Campaign-based)
+                        </h3>
+                        <p>針對特定目標，在短時間內集中資源創造效益</p>
+                    </div>
+                    <div class="strategy-body">
+                        <p>
+                            <strong>情境1：新品上市／市場推廣</strong><br>
+                            KOL/短影音引爆話題，SEM精準攔截搜尋流量，公關新聞建立市場信賴感。
+                        </p>
+                         <div class="tools-combo">
+                            <span class="tool-pill"><i class="fas fa-star"></i>KOL合作</span>
+                            <span class="tool-pill"><i class="fas fa-film"></i>短影音行銷</span>
+                            <span class="tool-pill"><i class="fas fa-search-dollar"></i>SEM</span>
+                            <span class="tool-pill"><i class="fas fa-bullhorn"></i>公關新聞</span>
+                        </div>
+                        <p style="margin-top: 1.5rem;">
+                            <strong>情境2：提升轉換／短期促銷</strong><br>
+                            SEM直接鎖定高意圖流量，KOL直播團購催化購買決策，社群廣告精準推播擴大觸及。
+                        </p>
+                        <div class="tools-combo">
+                             <span class="tool-pill"><i class="fas fa-search-dollar"></i>SEM</span>
+                             <span class="tool-pill"><i class="fas fa-star"></i>KOL合作</span>
+                             <span class="tool-pill"><i class="fas fa-users"></i>社群廣告</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategy Card: Event-driven -->
+                <div class="strategy-card" id="strategy-event">
+                    <div class="strategy-header">
+                        <h3>
+                            <span class="strategy-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
+                            事件驅動 (Event-driven)
+                        </h3>
+                        <p>在關鍵事件發生時快速反應，特別是危機處理</p>
+                    </div>
+                    <div class="strategy-body">
+                        <p>此時的關鍵在於速度與公信力。需第一時間透過具權威性的媒體管道發布官方聲明、澄清事實，藉此掌握話語權，穩定內外部信心，引導輿論走向。</p>
+                        <div class="tools-combo">
+                             <span class="tool-pill"><i class="fas fa-bullhorn"></i>公關新聞</span>
+                             <span class="tool-pill"><i class="fas fa-file-invoice-dollar"></i>買新聞 (數位版)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>
