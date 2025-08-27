@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創新商業模式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            overflow-x: auto;
+        }
+        
+        .container {
+            min-width: 1800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .main-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+        
+        .tree-horizontal {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            padding: 20px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        
+        .branch-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ecf0f1;
+            transition: all 0.3s ease;
+            min-width: 280px;
+            max-width: 280px;
+            height: auto;
+            min-height: 200px;
+        }
+        
+        .branch-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+        
+        .branch-title {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .branch-details {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .branch-arrow {
+            color: #3498db;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .branch-result {
+            background: linear-gradient(45deg, #e8f8f5, #f0fdf4);
+            color: #27ae60;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            border: 2px solid #a7f3d0;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.3;
+        }
+        
+        .branch-result:hover {
+            background: linear-gradient(45deg, #d1fae5, #ecfdf5);
+            transform: scale(1.05);
+        }
+        
+        .special-section {
+            margin-top: 40px;
+            background: linear-gradient(45deg, #fff3cd, #fefce8);
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 6px solid #f59e0b;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.1);
+        }
+        
+        .special-section h3 {
+            color: #d97706;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+        
+        .special-content {
+            color: #92400e;
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        /* 連接線效果 */
+        .branch-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -15px;
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #3498db);
+            transform: translateY(-50%);
+        }
+        
+        .branch-card:first-child::before {
+            display: none;
+        }
+        
+        .tree-horizontal {
+            position: relative;
+        }
+        
+        .tree-horizontal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #3498db);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+        
+        .branch-card {
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .branch-card {
+            animation: slideInUp 0.6s ease forwards;
+        }
+        
+        .branch-card:nth-child(1) { animation-delay: 0.1s; }
+        .branch-card:nth-child(2) { animation-delay: 0.2s; }
+        .branch-card:nth-child(3) { animation-delay: 0.3s; }
+        .branch-card:nth-child(4) { animation-delay: 0.4s; }
+        .branch-card:nth-child(5) { animation-delay: 0.5s; }
+        .branch-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        @media (max-width: 1200px) {
+            body {
+                overflow-x: scroll;
+            }
+            
+            .container {
+                min-width: 1400px;
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 2em;
+            }
+            
+            .tree-horizontal {
+                gap: 20px;
+                padding-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                min-width: 1200px;
+                padding: 15px;
+            }
+            
+            .branch-card {
+                min-width: 220px;
+                max-width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">創新商業模式</h1>
+            <p class="subtitle">Taiwan 複製到沙特</p>
+        </div>
+        
+        <div class="tree-horizontal">
+            <div class="branch-card">
+                <div class="branch-title">設備</div>
+                <div class="branch-details">(加軟體)</div>
+                <div class="branch-arrow">↓</div>
+                <div class="branch-result">神匠</div>
+            </div>
+            
+            <div class="branch-card">
+                <div class="branch-title">中草藥</div>
+                <div class="branch-details">(萃取)</div>
+                <div class="branch-arrow">↓</div>
+                <div class="branch-result">文博</div>
+            </div>
+            
+            <div class="branch-card">
+                <div class="branch-title">專利配方</div>
+                <div class="branch-details">(中草藥+飲料)</div>
+                <div class="branch-arrow">↓</div>
+                <div class="branch-result">東海、邱博</div>
+            </div>
+            
+            <div class="branch-card">
+                <div class="branch-title">節能</div>
+                <div class="branch-details">(LED、太陽能、冷氣)</div>
+                <div class="branch-arrow">↓</div>
+                <div class="branch-result">神匠、林仲志教授</div>
+            </div>
+            
+            <div class="branch-card">
+                <div class="branch-title">專利軟體</div>
+                <div class="branch-details">(智能升級)</div>
+                <div class="branch-arrow">↓</div>
+                <div class="branch-result">台科大或交大</div>
+            </div>
+            
+            <div class="branch-card">
+                <div class="branch-title">合作模式</div>
+                <div class="branch-details">輕食早午餐</div>
+                <div class="branch-arrow">↓</div>
+                <div class="branch-result">旗艦、現場一條龍、拼加盟</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
