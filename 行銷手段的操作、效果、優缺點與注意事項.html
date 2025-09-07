@@ -13,23 +13,14 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 
-        Note on Animation: 
-        To achieve the desired "Framer Motion" style of gentle micro-animations 
-        while keeping this a simple, self-contained HTML file,
-        we are using pure CSS Keyframes and Transitions.
-        This provides the requested visual effect (fade-in, float-up, pulse) 
-        without the need for a JavaScript framework like React.
-    -->
-
     <style>
         /* --- 1. Global & Variables --- */
         :root {
             --color-bg: #FFFFFF;
             --color-bg-alt: #F8F9FA;
-            --color-text: #343A40;
-            --color-text-light: #6C757D;
-            --color-border: #E9ECEF;
+            --color-text: #212529; /* Slightly darker main text for max contrast */
+            --color-text-light: #495057; /* Darkened for higher contrast */
+            --color-border: #DEE2E6; /* Darkened for better definition */
             
             --color-accent-blue: #4A90E2;
             --color-accent-purple: #9013FE;
@@ -140,7 +131,7 @@
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius);
             padding: 2rem;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Slightly enhanced shadow */
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
             
             /* Animation Setup */
