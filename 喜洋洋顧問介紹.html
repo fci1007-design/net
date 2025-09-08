@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喜洋洋國際管理顧問公司 - 我們的專業顧問群</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #0056b3;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            color: #003366;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .consultant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .consultant-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .consultant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 86, 179, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #0056b3, #003366);
+            color: white;
+        }
+
+        .consultant-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin-right: 20px;
+            object-fit: cover;
+            background-color: #e9ecef; /* Placeholder color */
+        }
+
+        .consultant-info h2 {
+            margin: 0;
+            font-size: 1.6em;
+            font-weight: 700;
+        }
+
+        .consultant-info p {
+            margin: 0;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .arrow-icon {
+            margin-left: auto;
+            font-size: 1.5em;
+            transition: transform 0.4s ease;
+        }
+
+        .consultant-card.open .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-out, padding 0.7s ease-out;
+            padding: 0 30px;
+        }
+        
+        .consultant-card.open .card-body {
+             max-height: 2000px; /* Adjust as needed */
+             padding: 25px 30px;
+        }
+
+        .card-body h3 {
+            font-size: 1.3em;
+            color: #0056b3;
+            border-left: 4px solid #0056b3;
+            padding-left: 15px;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .card-body ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 25px;
+        }
+
+        .card-body ul li {
+            background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230056b3" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>') no-repeat left center;
+            padding-left: 25px;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .expertise-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-left: 0;
+        }
+
+        .expertise-pills li {
+            background-color: #e7f0ff;
+            color: #0056b3;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .section {
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section h2 {
+            text-align: center;
+            font-size: 2.2em;
+            color: #003366;
+            margin-bottom: 40px;
+        }
+
+        .section-content {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .section-item {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .section-item h3 {
+            font-size: 1.5em;
+            color: #0056b3;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-item h3::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            background-size: contain;
+        }
+        
+        h3.assist::before {
+             background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%230056b3" class="bi bi-person-workspace" viewBox="0 0 16 16"><path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H4Zm4-5.947a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z"/><path d="M13 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h10ZM2 2v8h12V2H2Z"/></svg>');
+        }
+        
+        h3.cases::before {
+             background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%230056b3" class="bi bi-building-check" viewBox="0 0 16 16"><path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514Z"/><path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1V1Z"/><path d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z"/></svg>');
+        }
+
+        .section-item ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0;
+        }
+
+        .section-item ul li {
+            background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230056b3" class="bi bi-arrow-right-short" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>') no-repeat left 8px;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #ddd;
+            color: #777;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="header">
+            <h1>我們的專業顧問群</h1>
+            <p>由頂尖的博士級專家組成，為您的組織提供全方位的策略規劃與解決方案。</p>
+        </header>
+
+        <div class="consultant-grid">
+
+            <!-- 方崇懿博士 -->
+            <div class="consultant-card" id="consultant1">
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/80?u=fang" alt="方崇懿博士" class="consultant-photo">
+                    <div class="consultant-info">
+                        <h2>方崇懿 博士</h2>
+                        <p>資深顧問</p>
+                    </div>
+                    <div class="arrow-icon">&#9660;</div>
+                </div>
+                <div class="card-body">
+                    <h3>學歷</h3>
+                    <ul>
+                        <li>國立台灣科技大學財務金融研究所博士</li>
+                    </ul>
+                    <h3>現職</h3>
+                    <ul>
+                        <li>喜洋洋國際管理顧問公司資深顧問</li>
+                        <li>國防醫學院校務基金稽核委員會稽核委員/召集人</li>
+                        <li>中華決策科學學會秘書長</li>
+                        <li>彩券永續發展協會副秘書長</li>
+                        <li>彩券永續發展研究院執行長</li>
+                        <li>國防部軍人保險監理會財務研究小組顧問</li>
+                        <li>國防大學財務管理學系兼任副教授</li>
+                    </ul>
+                    <h3>經歷</h3>
+                    <ul>
+                        <li>國防大學財務管理學系專任助理教授、專任副教授</li>
+                        <li>國防部軍人保險監理會財務研究小組</li>
+                        <li>台灣科技大學台灣彩券與博彩研究中心研究員</li>
+                        <li>國防工業發展基金會列管軍品廠商資格級別認證評鑑委員</li>
+                        <li>Google 數位人才探索計畫 資格認證</li>
+                        <li>Digital Marketing and Analytics、Google Cloud Computing Foundations</li>
+                        <li>Generative Al for Developers</li>
+                    </ul>
+                    <h3>專長領域</h3>
+                    <ul class="expertise-pills">
+                        <li>財務資源管理</li>
+                        <li>政府會計審計</li>
+                        <li>運動彩券政策與制度研究</li>
+                        <li>系統動態學建模與政策分析</li>
+                        <li>AI應用規劃</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 吳勝富博士 -->
+            <div class="consultant-card" id="consultant2">
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/80?u=wu" alt="吳勝富博士" class="consultant-photo">
+                    <div class="consultant-info">
+                        <h2>吳勝富 博士</h2>
+                        <p>資深顧問</p>
+                    </div>
+                     <div class="arrow-icon">&#9660;</div>
+                </div>
+                <div class="card-body">
+                    <h3>學歷</h3>
+                    <ul>
+                        <li>國立臺北科技大學工商管理研究所博士</li>
+                    </ul>
+                    <h3>現職</h3>
+                    <ul>
+                        <li>喜洋洋國際管理顧問公司資深顧問</li>
+                        <li>國防醫學院校務基金稽核委員會稽核委員</li>
+                        <li>國防部軍人保險監理會財務研究小組顧問</li>
+                        <li>上市上櫃董事、監察人及公司治理主管進修課程講師</li>
+                        <li>勞動力發展署提升勞工自主學習計畫-ESG永續經營碳盤查實務訓練班 課程講師</li>
+                    </ul>
+                    <h3>經歷</h3>
+                    <ul>
+                        <li>國防大學財務管理學系專任講師、專任助理教授、專任副教授</li>
+                        <li>致理科技大學會資系兼任副教授</li>
+                        <li>彩券永續發展研究院永續長</li>
+                        <li>國防部軍人保險監理會財務研究小組</li>
+                        <li>國防大學財務管理學系兼任副教授</li>
+                    </ul>
+                    <h3>專業證照</h3>
+                    <ul>
+                        <li>IPMA Level B 國際專案管理師</li>
+                        <li>ICAEA國際ERP電腦稽核師(CEAP)</li>
+                        <li>經濟部iPAS淨零碳規劃管理師(初級)</li>
+                        <li>AFNOR ISO 14064-1: 2018主導查證員</li>
+                        <li>AFNOR ISO 14067: 2018主導查證員</li>
+                        <li>TUV NORD ESG 永續報告書訓練(GRI2021/SASB/TCFD standards)</li>
+                    </ul>
+                    <h3>專長領域</h3>
+                    <ul class="expertise-pills">
+                        <li>ESG永續議題</li>
+                        <li>公司治理</li>
+                        <li>國防財務管理</li>
+                        <li>電腦稽核</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 張家揚博士 -->
+            <div class="consultant-card" id="consultant3">
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/80?u=chang" alt="張家揚博士" class="consultant-photo">
+                    <div class="consultant-info">
+                        <h2>張家揚 博士</h2>
+                        <p>資深顧問</p>
+                    </div>
+                     <div class="arrow-icon">&#9660;</div>
+                </div>
+                <div class="card-body">
+                    <h3>學歷</h3>
+                    <ul>
+                        <li>國立臺灣科技大學博士</li>
+                    </ul>
+                    <h3>現職</h3>
+                    <ul>
+                        <li>喜洋洋國際管理顧問公司資深顧問</li>
+                        <li>彩券永續發展研究院營運長</li>
+                        <li>中華決策科學學會副秘書長</li>
+                    </ul>
+                    <h3>經歷</h3>
+                    <ul>
+                        <li>國立臺灣科技大學台灣彩券與博彩研究中心研究員</li>
+                        <li>中華決策科學學會副秘書長</li>
+                    </ul>
+                    <h3>專業證照</h3>
+                    <ul>
+                        <li>中華專案管理學會專案助理證書</li>
+                        <li>行政院公共工程委員會採購專業人員基礎訓練及格證書</li>
+                        <li>財政部促參專業式教育訓練結訓證明書</li>
+                    </ul>
+                    <h3>專長領域</h3>
+                    <ul class="expertise-pills">
+                        <li>專案管理</li>
+                        <li>策略管理</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 鄧勇誌博士 -->
+            <div class="consultant-card" id="consultant4">
+                <div class="card-header">
+                    <img src="https://i.pravatar.cc/80?u=deng" alt="鄧勇誌博士" class="consultant-photo">
+                    <div class="consultant-info">
+                        <h2>鄧勇誌 博士</h2>
+                        <p>資深顧問</p>
+                    </div>
+                     <div class="arrow-icon">&#9660;</div>
+                </div>
+                <div class="card-body">
+                     <h3>學歷</h3>
+                    <ul>
+                        <li>國立臺北科技大學管理博士</li>
+                    </ul>
+                    <h3>現職</h3>
+                    <ul>
+                        <li>國防醫學大學校務基金稽核</li>
+                        <li>彩券永續發展研究院數位長</li>
+                        <li>國防大學財務管理學系兼任助理教授</li>
+                        <li>明新科技大學工業工程管理系兼任助理教授</li>
+                        <li>台北市員林高中校友會青年委員會主委</li>
+                        <li>國防工業發展基金會列管軍品廠商資格級別認證評鑑委員</li>
+                        <li>IPMA國際專案管理師(Level-B)</li>
+                        <li>Google 數位人才探索計畫 資格認證 (Digital Marketing and Analytics, Google Cloud Computing Foundations, Generative Al for Developers)</li>
+                    </ul>
+                    <h3>專長領域</h3>
+                    <ul class="expertise-pills">
+                        <li>專案管理</li>
+                        <li>數位轉型</li>
+                        <li>流程優化</li>
+                        <li>數據分析</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <section class="section">
+            <h2>我們能提供的協助</h2>
+            <div class="section-content">
+                <div class="section-item">
+                    <h3 class="assist">核心服務方式</h3>
+                    <ul>
+                        <li>專案評估、分析、規劃、管理</li>
+                        <li>內部流程診斷、分析、優化</li>
+                        <li>數位轉型策略規劃與導入</li>
+                        <li>ESG永續發展與碳盤查輔導</li>
+                        <li>員工專業職能訓練</li>
+                    </ul>
+                </div>
+                <div class="section-item">
+                    <h3 class="cases">近年代表案例</h3>
+                    <ul>
+                        <li>國防醫學大學（醫學院）的內部稽核、行政與業務流程優化</li>
+                        <li>國防部軍人保險監理會系統導入、數位轉型訓練</li>
+                        <li>和成（HCG）子公司寶隆室內工藝行政管理流程優化、數位轉型、員工訓練</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 喜洋洋國際管理顧問公司. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.consultant-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Close all other open cards
+                    cards.forEach(otherCard => {
+                        if (otherCard !== this && otherCard.classList.contains('open')) {
+                            otherCard.classList.remove('open');
+                        }
+                    });
+                    // Toggle the clicked card
+                    this.classList.toggle('open');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
