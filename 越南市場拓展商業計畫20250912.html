@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新世代智慧農業整合方案 商業計畫書</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+        :root {
+            --primary-green: #4CAF50;
+            --dark-green: #2E7D32;
+            --light-green: #E8F5E9;
+            --primary-blue: #2196F3;
+            --dark-blue: #0D47A1;
+            --text-dark: #2c3e50;
+            --text-light: #555;
+            --bg-light: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            margin: 0;
+            line-height: 1.8;
+            color: var(--text-light);
+            background-color: #fff;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 10px 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-green);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-green);
+            transition: width 0.3s ease-in-out;
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            background: linear-gradient(rgba(1, 91, 3, 0.7), rgba(46, 125, 50, 0.6)), url('https://images.unsplash.com/photo-1597825368383-490c681ad8c8?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=3600') no-repeat center center/cover;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .hero p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        
+        section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        h2.section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2.section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: var(--primary-green);
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px auto;
+            color: #777;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .tech-card h4 {
+            font-size: 1.5rem;
+            color: var(--dark-green);
+            margin-top: 0;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        li::before {
+            content: '✓';
+            color: var(--primary-green);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .problem-section ul li::before {
+            content: '✗';
+            color: #e57373;
+        }
+        
+        .roadmap {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #e0e0e0;
+            transform: translateX(-50%);
+        }
+
+        .roadmap-item {
+            padding: 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.05); /* Transparent to show line */
+        }
+
+        .roadmap-item:nth-child(odd) {
+            left: 0;
+            padding-right: 70px;
+            text-align: right;
+        }
+
+        .roadmap-item:nth-child(even) {
+            left: 50%;
+            padding-left: 70px;
+        }
+        
+        .roadmap-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--primary-green);
+            transform: translateY(-50%);
+        }
+
+        .roadmap-item:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .roadmap-item:nth-child(even)::after {
+            left: -10px;
+        }
+        
+        .roadmap-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+        
+        .roadmap-content h4 {
+            margin-top: 0;
+            color: var(--dark-blue);
+            font-size: 1.4rem;
+        }
+
+        .svg-container {
+            text-align: center;
+            margin: 40px 0;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+        
+        .value-prop {
+            border-left: 4px solid var(--border-color);
+            padding-left: 20px;
+            margin-top: 20px;
+        }
+        
+        .value-prop h4 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+        
+        .value-prop.partner { border-color: var(--primary-green); }
+        .value-prop.consumer { border-color: var(--primary-blue); }
+        .value-prop.company { border-color: #f57c00; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="#summary">執行摘要</a>
+            <a href="#technology">核心技術</a>
+            <a href="#model">商業模式</a>
+            <a href="#roadmap">發展藍圖</a>
+            <a href="#financials">財務規劃</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>新世代智慧農業整合方案</h1>
+            <h2>暨 越南市場拓展商業計畫書</h2>
+            <p>提案單位：妍發科技 | 討論日期：2025年9月12日</p>
+        </div>
+    </div>
+
+    <main>
+        <section id="summary" class="container">
+            <h2 class="section-title">1. 執行摘要</h2>
+            <p class="section-subtitle">透過技術創新與獨特商業模式，開創都市農業的嶄新未來。</p>
+            <div class="card">
+                <p>本計畫旨在透過革命性的內部技術創新與獨特的商業模式，解決當前都市農業面臨的成本、效率與擴展性三大痛點，並以此為基礎，開拓潛力巨大的越南市場。</p>
+                <p>核心技術創新在於開發一套「動態升降LED光照系統」與「一體化壓克力栽培水盤」。此組合將徹底取代傳統固定式燈架與需頻繁清洗的保麗龍板，預期能將作物生長週期縮短約30%、顯著降低能耗與人力成本，並建立可申請專利的技術壁壘。</p>
+                <p>針對越南市場，本計畫提出創新的「中央廚房 - 衛星門市 (Central Kitchen - Satellite Store)」商業模式。此模式將技術密集的育苗與獨家培養液調配作業集中化管理，再將半成品菜苗配送至越南合作夥伴「My」的餐廳門市。門市只需完成最後的簡易栽培與收成，即可透過店內的「玻璃屋 (Glass House)」展示型農場，為顧客提供最新鮮、看得見的安心蔬菜。此模式不僅大幅降低了海外合作夥伴的技術門檻與營運負擔，更能快速、標準化地複製成功經驗，實現品牌的規模化擴張。</p>
+                <p>本計畫不僅是一次技術升級，更是一套完整的商業生態系統輸出方案，目標是成為亞洲都市智慧農業的領導品牌。</p>
+            </div>
+        </section>
+
+        <section id="technology" class="container" style="background-color: var(--bg-light);">
+            <h2 class="section-title">2. 核心技術與創新模式</h2>
+            <p class="section-subtitle">從根本解決傳統水耕栽培的瓶頸，建立獨家競爭優勢。</p>
+            
+            <div class="card problem-section">
+                <h3>現行水耕栽培的瓶頸</h3>
+                <ul>
+                    <li><strong>高昂的營運成本：</strong> 傳統產線高度依賴人力進行保麗龍板的清洗、消毒與植栽作業，且工業用電成本居高不下。</li>
+                    <li><strong>靜態的光照效率：</strong> 固定的LED燈架無法適應蔬菜從苗期到成株的高度變化，造成前期光照距離過遠、能源浪費；後期又可能因距離過近而灼傷作物。</li>
+                    <li><strong>衛生與耗材問題：</strong> 保麗龍板為消耗品，長期使用會產生耗損與衛生疑慮，清洗過程亦消耗大量水資源與人力。</li>
+                </ul>
+            </div>
+
+            <h3>創新解決方案：新一代智慧栽培系統</h3>
+            <div class="grid-2">
+                <div class="card tech-card">
+                    <h4>1. 一體化壓克力栽培水盤</h4>
+                    <p><strong>設計：</strong> 取消傳統保麗龍板，改採客製化設計、一體成型的壓克力栽培水盤。水盤上直接設有標準化的植栽孔位，並採用抽屜式設計，便於拉出清洗與維護。</p>
+                    <p><strong>優勢：</strong></p>
+                    <ul>
+                        <li>材質堅固耐用、易於清洗消毒，可重複使用多年。</li>
+                        <li>大幅降低耗材成本與人力。</li>
+                        <li>透明或半透明的設計更具科技感與展示性。</li>
+                    </ul>
+                </div>
+                <div class="card tech-card">
+                    <h4>2. 動態升降LED光照系統</h4>
+                    <p><strong>概念：</strong> 引入「電梯式」升降概念，讓LED燈架模組能根據作物的生長階段，透過AI或預設程式自動調整高度。</p>
+                    <p><strong>效益：</strong></p>
+                    <ul>
+                        <li><strong>加速生長：</strong> 最大化光能吸收效率，縮短作物生長週期。</li>
+                        <li><strong>節省能源：</strong> 避免光能散失，並可設定間歇性光照。</li>
+                        <li><strong>強化散熱：</strong> 可加裝小型風扇輔助散熱，降低空調依賴。</li>
+                        <li><strong>提升品質：</strong> 精準的光照控制有助於提升蔬菜的口感與營養價值。</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="text-align: center; font-weight: bold; color: var(--dark-green); margin-top: 20px;">此套系統將可申請發明專利，成為公司獨家的競爭優勢。</p>
+        </section>
+
+        <section id="model" class="container">
+            <h2 class="section-title">3. 越南市場拓展商業模式</h2>
+            <p class="section-subtitle">詳解「中央廚房-衛星門市」模式，一套為快速擴展而生的輕資產、高效率合作方案。</p>
+            
+            <div class="svg-container">
+                <svg width="100%" viewBox="0 0 1200 650" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans TC', sans-serif"><text x="600" y="50" font-size="32" font-weight="bold" text-anchor="middle" fill="#2c3e50">「中央廚房-衛星門市」商業模式</text><rect x="50" y="100" width="500" height="480" rx="20" ry="20" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/><g transform="translate(80, 130)"><path d="M10,40 h-5 v-20 l15,-15 l15,15 v20 h-5" fill="none" stroke="#388e3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M25,25 l-10,10 h-5 l10,-10 l10,10 h-5 l-10,-10" fill="none" stroke="#388e3c" stroke-width="2"/><circle cx="20" cy="30" r="3" fill="#388e3c"/></g><text x="140" y="160" font-size="28" font-weight="600" fill="#1b5e20">中央廚房</text><text x="140" y="190" font-size="16" fill="#4caf50">(核心技術與供應中心)</text><line x1="80" y1="220" x2="520" y2="220" stroke="#c8e6c9" stroke-width="1.5"/><g transform="translate(80, 250)"><circle cx="15" cy="15" r="12" fill="#4caf50" opacity="0.2"/><path d="M10 10 L 20 20 M 10 20 L 20 10" stroke="#388e3c" stroke-width="2.5" stroke-linecap="round"/><text x="40" y="20" font-size="18" font-weight="500" fill="#2e7d32">職責：</text></g><g font-size="16" fill="#333"><text x="100" y="310">1. 高品質育苗：負責所有技術要求最高的育苗工作。</text><text x="100" y="340">2. 獨家培養液：統一調配與分裝獨家配方的培養液。</text><text x="100" y="370">3. 技術研發：持續進行品種改良與技術優化。</text><text x="100" y="400">4. 教育訓練：提供越南門市人員標準化的操作訓練。</text></g><g transform="translate(80, 450)"><circle cx="15" cy="15" r="12" fill="#ffc107" opacity="0.2"/><path d="M15,8 v10 M15 24 v-1" stroke="#f57f17" stroke-width="2.5" stroke-linecap="round"/><circle cx="15" cy="22" r="1" fill="#f57f17"/><text x="40" y="20" font-size="18" font-weight="500" fill="#2e7d32">定位：</text></g><g font-size="16" fill="#333"><text x="100" y="500">整個體系的「大腦」與「心臟」，確保所有衛星門市</text><text x="100" y="525">的產出品質一致。</text></g><rect x="650" y="100" width="500" height="480" rx="20" ry="20" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/><g transform="translate(680, 130)"><path d="M0,40 h40 v-20 h-10 l-10,-15 l-10,15 h-10 z" fill="none" stroke="#1976d2" stroke-width="3" stroke-linejoin="round"/><path d="M10,40 v-15 M30,40 v-15" stroke="#1976d2" stroke-width="2"/></g><text x="740" y="160" font-size="28" font-weight="600" fill="#0d47a1">衛星「玻璃屋」門市</text><text x="740" y="190" font-size="16" fill="#42a5f5">(展示與銷售點)</text><line x1="680" y1="220" x2="1120" y2="220" stroke="#bbdefb" stroke-width="1.5"/><g transform="translate(680, 250)"><circle cx="15" cy="15" r="12" fill="#42a5f5" opacity="0.2"/><path d="M10 10 L 20 20 M 10 20 L 20 10" stroke="#1976d2" stroke-width="2.5" stroke-linecap="round"/><text x="40" y="20" font-size="18" font-weight="500" fill="#1565c0">職責：</text></g><g font-size="16" fill="#333"><text x="700" y="310">1. 簡易栽培：接收半成品菜苗，簡易維護。</text><text x="700" y="340">2. 新鮮收成：每日收成，供應餐廳與販售。</text><text x="700" y="370">3. 顧客體驗：打造「現摘現吃」的獨特體驗。</text></g><g transform="translate(680, 450)"><circle cx="15" cy="15" r="12" fill="#ffc107" opacity="0.2"/><path d="M15,8 v10 M15 24 v-1" stroke="#f57f17" stroke-width="2.5" stroke-linecap="round"/><circle cx="15" cy="22" r="1" fill="#f57f17"/><text x="40" y="20" font-size="18" font-weight="500" fill="#1565c0">定位：</text></g><g font-size="16" fill="#333"><text x="700" y="500">品牌的「門面」與「觸角」，直接面對消費者，</text><text x="700" y="525">創造營收。</text></g><defs><marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#2e7d32"/></marker><marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#1565c0"/></marker></defs><path d="M 550,250 C 580,210 620,210 650,250" stroke="#2e7d32" stroke-width="2.5" fill="none" marker-end="url(#arrowhead-green)"/><text x="600" y="220" font-size="14" font-weight="500" text-anchor="middle" fill="#2e7d32">半成品菜苗 &amp; 培養液配送</text><path d="M 650,450 C 620,490 580,490 550,450" stroke="#1565c0" stroke-width="2.5" fill="none" marker-end="url(#arrowhead-blue)"/><text x="600" y="495" font-size="14" font-weight="500" text-anchor="middle" fill="#1565c0">訂單 &amp; 數據回饋</text></svg>
+            </div>
+            
+            <h3>具體運作流程</h3>
+            <ol>
+                <li><strong>訂單與生產：</strong> 越南門市根據預估需求向中央廚房下訂單。中央廚房排程進行育苗。</li>
+                <li><strong>半成品配送：</strong> 將已生長1-2週的健壯菜苗，連同預分裝好的培養液，透過冷鏈物流配送至越南各門市。</li>
+                <li><strong>上架栽培：</strong> 門市人員將菜苗簡單地放置到店內展示產線的孔位上，並倒入培養液。整個過程僅需極少時間與訓練。</li>
+                <li><strong>展示與銷售：</strong> 在接下來的1-2週內，顧客可以在用餐時欣賞蔬菜的生長。門市可規劃「週一的菜」、「週二的菜」，創造每日不同的新鮮主題。</li>
+                <li><strong>衍生商品銷售：</strong> 顧客在體驗後，不僅可以購買新鮮蔬菜帶回家，還可以購買餐廳搭配的獨家醬料與調味品，創造額外營收。</li>
+                <li><strong>循環作業：</strong> 門市收成完一批後，下一批來自中央廚房的菜苗即可無縫接軌補上。</li>
+            </ol>
+            
+            <h3>模式優勢與價值主張</h3>
+            <div class="grid-2">
+                <div class="value-prop partner">
+                    <h4>對合作夥伴 (My)</h4>
+                    <ul>
+                        <li><strong>低技術門檻：</strong> 無需了解複雜的育苗技術與培養液配方。</li>
+                        <li><strong>低風險營運：</strong> 簡化了日常操作，減少了因人為失誤導致栽培失敗的風險。</li>
+                        <li><strong>高品牌價值：</strong> 直接獲得一個兼具科技感、新鮮、安心的品牌形象，提升餐廳的附加價值。</li>
+                    </ul>
+                </div>
+                <div class="value-prop consumer">
+                    <h4>對消費者</h4>
+                    <ul>
+                        <li><strong>絕對新鮮：</strong> 提供從產地到餐桌「零距離」的蔬菜。</li>
+                        <li><strong>食品安全：</strong> 生長過程透明可見，杜絕農藥與污染的疑慮。</li>
+                        <li><strong>獨特體驗：</strong> 結合餐飲與現代農業，創造獨一無二的消費體驗。</li>
+                    </ul>
+                </div>
+                <div class="value-prop company" style="grid-column: 1 / -1;">
+                     <h4>對本公司</h4>
+                    <ul>
+                        <li><strong>快速擴展：</strong> 此模式易於複製，有利於迅速增加合作門市數量。</li>
+                        <li><strong>保護核心技術：</strong> 將關鍵技術（尤其是培養液配方）留在中央廚房，避免技術外流。</li>
+                        <li><strong>穩定的收入來源：</strong> 透過持續供應菜苗與培養液，創造穩定的現金流。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="container" style="background-color: var(--bg-light);">
+            <h2 class="section-title">4. 發展藍圖與期程規劃</h2>
+            <p class="section-subtitle">分階段實施，從技術驗證到市場擴張，穩步前行。</p>
+            <div class="roadmap">
+                <div class="roadmap-item">
+                    <div class="roadmap-content">
+                        <h4>第一階段 (OOO 個月)：台灣示範產線建置</h4>
+                        <ul>
+                            <li>完成新一代智慧栽培系統的設計、打樣與專利申請。</li>
+                            <li>在公司一樓建立完整的示範產線，進行壓力測試與數據收集。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-content">
+                        <h4>第二階段 (OOO 個月)：越南首間門市合作</h4>
+                        <ul>
+                            <li>與越南「My」合作，建置第一間「衛星展示與銷售點」。</li>
+                            <li>建立台灣至越南的半成品冷鏈物流模式。</li>
+                            <li>驗證並優化「中央廚房-衛星門市」商業模式。</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="roadmap-item">
+                    <div class="roadmap-content">
+                        <h4>第三階段 (OOO 年)：全面擴展</h4>
+                        <ul>
+                            <li>在越南建立當地的「中央廚房」，以降低物流成本並提升供應效率。</li>
+                            <li>積極拓展越南其他餐飲連鎖品牌合作，目標在 OOO 年內達到 OOO 家合作門市。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="financials" class="container">
+            <h2 class="section-title">5. 財務規劃</h2>
+            <p class="section-subtitle">清晰的成本結構與多元的收入模型，確保計畫的可持續性。</p>
+            <div class="card">
+                <div class="grid-2">
+                    <div>
+                        <h4>成本結構</h4>
+                        <ul>
+                            <li><strong>初期投資：</strong> OOO 元 (用於新系統研發、專利申請、台灣示範產線建置)。</li>
+                            <li><strong>營運成本：</strong> OOO 元/月 (包含人事、研發、中央廚房運營費用)。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>收入來源</h4>
+                        <ol>
+                            <li><strong>加盟/合作權利金：</strong> OOO 元/家。</li>
+                            <li><strong>物料銷售：</strong> 持續向合作門市銷售半成品菜苗與培養液。</li>
+                            <li><strong>技術服務費：</strong> OOO 元/年。</li>
+                            <li><strong>衍生商品分潤：</strong> 與門市拆分醬料等產品的銷售利潤。</li>
+                        </ol>
+                    </div>
+                </div>
+                 <hr style="border: 1px solid var(--border-color); margin: 30px 0;">
+                <p style="text-align: center;"><strong>預計損益兩平點：</strong> OOO 年 OOO 月 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <strong>預計三年後營收：</strong> OOO 元</p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="container" style="background-color: var(--bg-light);">
+            <h2 class="section-title">6. 結論</h2>
+            <div class="card" style="text-align: center;">
+                <p>本計畫書所擘劃的藍圖，是將妍發科技在水耕栽培領域的核心技術，轉化為一套可規模化、可輸出的高價值商業解決方案。透過技術與商業模式的雙重創新，不僅能鞏固在台灣的領導地位，更有信心在越南乃至東南亞市場，開創都市智慧農業的新篇章。</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const sections = document.querySelectorAll('section');
+        const options = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px"
+        };
+        const observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            });
+        }, options);
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
