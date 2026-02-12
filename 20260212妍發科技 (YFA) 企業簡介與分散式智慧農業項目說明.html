@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>妍發科技 (YFA) - 分散式智慧農業項目說明</title>
+    <meta name="description" content="妍發科技 (YFA) 企業簡介與分散式智慧農業項目說明，從精密製造走向永續科技。">
+    
+    <!-- Google Fonts: Noto Sans TC for Traditional Chinese -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Configuration for Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        yfa: {
+                            green: '#008F4C', // Based on typical corporate green
+                            light: '#F0F9F4',
+                            dark: '#0B3B24',
+                            accent: '#4CAF50'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for Printing and Aesthetics */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            background-image: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .section-card {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.75rem;
+            border-left: 5px solid #008F4C;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .content-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 1.5rem auto;
+            display: block;
+            object-fit: cover;
+            /* Ensure aspect ratio consistency visually */
+            aspect-ratio: 16/9; 
+            object-position: center;
+        }
+
+        h1, h2, h3 {
+            color: #0B3B24;
+        }
+
+        .highlight-text {
+            color: #008F4C;
+            font-weight: 700;
+        }
+
+        /* Print Specific Styles for A4 PDF */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .section-card {
+                box-shadow: none;
+                border: none;
+                border-left: none; /* Remove color border to save ink/cleaner look */
+                border-bottom: 1px solid #ddd;
+                border-radius: 0;
+                margin-bottom: 1.5rem;
+                page-break-inside: avoid;
+            }
+            .no-print {
+                display: none;
+            }
+            .content-image {
+                box-shadow: none;
+                border: 1px solid #eee;
+                max-width: 90%; /* Prevent full bleed in print */
+                page-break-inside: avoid;
+            }
+            header {
+                position: relative !important;
+                margin-bottom: 20px;
+            }
+            /* Ensure text contrast is high for print */
+            .text-gray-600, .text-gray-500 {
+                color: #000 !important;
+            }
+            a {
+                text-decoration: none;
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative pb-12">
+
+    <!-- Header / Logo Area -->
+    <header class="w-full max-w-5xl mx-auto p-4 md:p-8 flex justify-between items-center relative print:static">
+        <!-- Logo Positioned Top Corner -->
+        <div class="absolute top-4 left-4 md:top-8 md:left-8 z-50 print:relative print:top-0 print:left-0 print:mb-4">
+            <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907387/0-LOGO_z8bwv4.png" 
+                 alt="YFA Logo" 
+                 class="w-24 md:w-32 h-auto object-contain">
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-5xl mx-auto px-4 pt-20 md:pt-24 print:pt-4">
+        
+        <!-- Hero Title -->
+        <div class="text-center mb-12 print:mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-yfa-dark mb-4 mt-8 md:mt-0">
+                妍發科技 (YFA) <br class="md:hidden"/>企業簡介與分散式智慧農業項目說明
+            </h1>
+            <div class="w-24 h-1 bg-yfa-green mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Section 1: 產業實力與轉型願景 -->
+        <section class="section-card p-6 md:p-10">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="bg-yfa-green text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">一</span>
+                產業實力與轉型願景：從精密製造走向永續科技
+            </h2>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-3 text-yfa-dark">1. 企業傳承：從精密電子到智慧科技</h3>
+                <p class="text-gray-700 text-justify mb-4">
+                    妍發科技（YFA）成立於 1997 年，深耕電子電路板（RFPC）製造領域累積超過 29 年的深厚技術底蘊。我們從專業生產起家，歷經產業多次技術更迭，始終維持穩健的財務體質與卓越的品質商譽。憑藉著對「精密製造」的堅持與「機電整合」的深厚功力，我們在自動化設備、材料應用及複雜製程管理上，累積了深厚的技術資產。
+                </p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-3 text-yfa-dark">2. 轉型願景：ESG 永續與跨界創新</h3>
+                <p class="text-gray-700 text-justify mb-4">
+                    在氣候變遷與全球減碳趨勢下，妍發科技自 2010 年起積極轉型，將 RFPC 產業的高精度控制技術轉移至「智慧農業」領域，並創立品牌「窩心菜舖」。我們不只是種植蔬菜，而是將精密電子製程應用到植物工廠，透過數據驅動與自動化控制，解決傳統農業受天氣與人力限制的痛點。
+                </p>
+                
+                <div class="bg-yfa-light p-5 rounded-lg border border-green-100 mt-4">
+                    <p class="font-bold text-yfa-green mb-2">累積核心優勢：</p>
+                    <ul class="list-none space-y-2">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-yfa-green mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700"><strong>精密控制技術：</strong> 將電子科技業的監控邏輯應用於植物生長環境。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-yfa-green mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700"><strong>機電整合能力：</strong> 自主研發與設計關鍵硬體機構（如動態升降系統）。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-yfa-green mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700"><strong>數據導向管理：</strong> 結合 IoT 感測與 AI 分析，實現精準種植與精準用電。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 新事業項目 -->
+        <section class="section-card p-6 md:p-10">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="bg-yfa-green text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">二</span>
+                新事業項目——分散式智慧農業設備
+            </h2>
+
+            <!-- 2.1 Project Background -->
+            <div class="mb-10">
+                <h3 class="text-xl font-semibold mb-3 text-yfa-dark">1. 專案背景：城市中的「微型農場」</h3>
+                <p class="text-gray-700 text-justify mb-6">
+                    因應現代餐飲對「食安溯源」與「低碳足跡」的高度要求，妍發科技優化核心技術，開發了分散式智慧農業設備 —「菜籃子」。「菜籃子」可打破傳統大型植物工廠的場域限制，將生產終端直接推向 B2B 商業空間，如餐廳、飯店、企業總部。
+                </p>
+                <!-- Image 1 -->
+                <figure class="my-6">
+                    <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907393/1-%E8%8F%9C%E7%B1%83%E5%AD%90%E5%95%86%E6%A8%A1_wccdhy.png" 
+                         alt="菜籃子商模" 
+                         class="content-image border border-gray-100">
+                    <figcaption class="text-center text-sm text-gray-500 mt-2">▲ 城市中的微型農場概念</figcaption>
+                </figure>
+            </div>
+
+            <!-- 2.2 Core Technology -->
+            <div class="mb-10">
+                <h3 class="text-xl font-semibold mb-3 text-yfa-dark">2. 核心技術：動態升降與節能優化</h3>
+                <p class="text-gray-700 text-justify mb-4">
+                    目前研發中的「菜籃子」具備以下兩大技術亮點：
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yfa-green mb-2">自動升降光源系統</h4>
+                        <p class="text-sm text-gray-600">
+                            傳統設備光源固定，導致植物開苗期造成光能浪費。本設備可根據植物生長高度，自動動態調整燈板距離。根據初步實驗模型推估，動態升降技術預期可提升幼苗期光合光子通量密度（PPFD）利用效率，並降低單株能耗，同時透過縮短光照路徑加速生長週期。
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yfa-green mb-2">模組化一體成型設計</h4>
+                        <p class="text-sm text-gray-600">
+                            採用食品級材質與一體化壓克力栽培水盤，取代傳統保麗龍耗材，不僅更易於清潔與維護，亦符合食品衛生高標，適合展示於餐廳等高頻接觸消費者的場域。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Image 2 -->
+                <figure class="my-6">
+                    <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907410/2-%E8%8F%9C%E7%B1%83%E5%AD%90%E9%97%9C%E9%8D%B5%E6%A9%9F%E6%A7%8B%E7%A4%BA%E6%84%8F_xumdnp.png" 
+                         alt="菜籃子關鍵機構示意" 
+                         class="content-image border border-gray-100">
+                    <figcaption class="text-center text-sm text-gray-500 mt-2">▲ 關鍵機構動態升降設計</figcaption>
+                </figure>
+
+                <!-- Image 3 -->
+                <figure class="my-6">
+                    <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907410/3-%E8%8F%9C%E7%B1%83%E5%AD%90%E6%8A%80%E8%A1%93%E8%88%87%E5%8A%9F%E8%83%BD_u5dzhx.png" 
+                         alt="菜籃子技術與功能" 
+                         class="content-image border border-gray-100">
+                    <figcaption class="text-center text-sm text-gray-500 mt-2">▲ 系統技術與功能架構</figcaption>
+                </figure>
+            </div>
+
+            <!-- 2.3 Business Model -->
+            <div class="mb-10">
+                <h3 class="text-xl font-semibold mb-3 text-yfa-dark">3. B2B 商業模式：中央廚房至衛星門市</h3>
+                <p class="text-gray-700 mb-4">我們提供的不僅是設備，而是<span class="highlight-text">「產地直抵餐桌」</span>的體驗：</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="border border-green-200 rounded p-4 text-center hover:shadow-md transition-shadow">
+                        <div class="text-yfa-green font-bold text-lg mb-2">種植簡化</div>
+                        <p class="text-sm text-gray-600 text-left">餐廳端無需專業農技人員，只需接收來自中央廚房的預育苗種，放入設備後由系統自動運行。</p>
+                    </div>
+                    <div class="border border-green-200 rounded p-4 text-center hover:shadow-md transition-shadow">
+                        <div class="text-yfa-green font-bold text-lg mb-2">現採鮮吃</div>
+                        <p class="text-sm text-gray-600 text-left">顧客可直接見證蔬菜生長過程，打造「產地直抵餐桌」的獨特餐飲體驗。</p>
+                    </div>
+                    <div class="border border-green-200 rounded p-4 text-center hover:shadow-md transition-shadow">
+                        <div class="text-yfa-green font-bold text-lg mb-2">減碳貢獻</div>
+                        <p class="text-sm text-gray-600 text-left">降低長途物流產生的碳排放，助力企業達成綠色金融與 ESG 指標。</p>
+                    </div>
+                </div>
+
+                <!-- Image 4: Appearance -->
+                <figure class="my-6">
+                    <!-- Adjusted Image Style: Removed 'content-image' class to avoid fixed aspect-ratio and border-radius cropping -->
+                    <!-- Used w-full h-auto object-contain to show full image without cropping -->
+                    <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907405/4-%E8%8F%9C%E7%B1%83%E5%AD%90%E5%A4%96%E8%A7%80_w0zibr.png" 
+                         alt="菜籃子外觀" 
+                         class="w-full max-w-4xl mx-auto h-auto object-contain block border border-gray-100 shadow-sm"
+                         style="border-radius: 0;"> 
+                    <figcaption class="text-center text-sm text-gray-500 mt-2">▲ 菜籃子設備外觀設計</figcaption>
+                </figure>
+            </div>
+
+            <!-- Moved Section: Application Scenarios -->
+            <div class="mb-10">
+                <h4 class="text-lg font-bold text-center text-yfa-dark mb-4">— 應用場域示意 —</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <figure>
+                        <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907408/6-%E8%8F%9C%E7%B1%83%E5%AD%90%E6%87%89%E7%94%A8%E5%BB%A0%E5%9F%9F%E7%A4%BA%E6%84%8F-2_q3syyc.png" 
+                             alt="應用場域示意 2" 
+                             class="w-full h-auto rounded-lg shadow-sm border border-gray-100 object-cover aspect-[4/3]">
+                    </figure>
+                    <figure>
+                        <img src="https://res.cloudinary.com/dkucvtida/image/upload/v1770907401/5-%E8%8F%9C%E7%B1%83%E5%AD%90%E6%87%89%E7%94%A8%E5%BB%A0%E5%9F%9F%E7%A4%BA%E6%84%8F-1_w0oiem.png" 
+                             alt="應用場域示意 1" 
+                             class="w-full h-auto rounded-lg shadow-sm border border-gray-100 object-cover aspect-[4/3]">
+                    </figure>
+                </div>
+            </div>
+
+            <!-- 2.4 R&D and Cooperation -->
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3 text-yfa-dark">4. 研發進展與合作邀約</h3>
+                <div class="bg-green-50 p-6 rounded-lg border-l-4 border-yfa-green">
+                    <p class="text-gray-700 text-justify mb-4">
+                        本項目目前正處於「精準參數驗證階段」。我們已針對高價值作物完成多項初步實驗，目前正持續優化不同光譜比例與營養液配方之最佳平衡點。
+                    </p>
+                    <p class="text-gray-700 text-justify">
+                        我們誠摯邀請具有 ESG 願景的企業夥伴加入『場域驗證先導計畫』，參與者將享有設備建置初期優惠與專屬作物品項客製服務，共同打造低碳商業空間的指標案例。透過早期參與，合作夥伴將能優先獲得針對特定場域客製化的技術支援，共同定義未來城市的餐食風景。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Contact Info -->
+        <footer class="bg-yfa-dark text-white rounded-lg p-8 mt-10 shadow-lg print:bg-white print:text-black print:border-t-2 print:border-black print:rounded-none print:shadow-none">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <h2 class="text-2xl font-bold mb-2">聯絡資訊</h2>
+                    <h3 class="text-lg font-light opacity-90">妍發科技股份有限公司</h3>
+                </div>
+                
+                <div class="space-y-3 text-sm md:text-base w-full md:w-auto">
+                    <div class="flex items-center justify-center md:justify-start">
+                        <svg class="w-5 h-5 mr-3 text-yfa-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        <a href="https://www.yfa.com.tw/" target="_blank" class="hover:text-yfa-accent transition-colors">https://www.yfa.com.tw/</a>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-start">
+                        <svg class="w-5 h-5 mr-3 text-yfa-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        <span>03-352-9818</span>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-start">
+                        <svg class="w-5 h-5 mr-3 text-yfa-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <a href="mailto:yfa.lu@msa.hinet.net" class="hover:text-yfa-accent transition-colors">yfa.lu@msa.hinet.net</a>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-start">
+                        <svg class="w-5 h-5 mr-3 text-yfa-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>桃園市蘆竹區蘆竹街131巷2號</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-green-800 mt-8 pt-4 text-center text-xs text-gray-300 print:text-black print:border-gray-300">
+                &copy; 2024 妍發科技股份有限公司 YFA Tech. All Rights Reserved.
+            </div>
+        </footer>
+
+    </main>
+
+</body>
+</html>
