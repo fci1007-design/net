@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESG 論文 AI 協作寫作 SOP — 全流程圖</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --human: #e74c3c;
+    --human-bg: #fdedec;
+    --consensus: #2980b9;
+    --consensus-bg: #d6eaf8;
+    --nlm: #0e6655;
+    --nlm-bg: #d5f5e3;
+    --gpt: #e67e22;
+    --gpt-bg: #fdebd0;
+    --ch-e: #27ae60;
+    --ch-s: #e67e22;
+    --ch-g: #8e44ad;
+    --primary: #1a5276;
+    --surface: #ffffff;
+    --border: #ccd1d9;
+    --text: #2c3e50;
+    --arrow: #7f8c8d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.6; padding: 0;
+  }
+
+  /* ── 頁面容器 ── */
+  .page {
+    max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px;
+  }
+
+  /* ── 標題區 ── */
+  .hero {
+    background: linear-gradient(135deg, #1a5276, #2980b9);
+    color: #fff; text-align: center;
+    padding: 36px 24px; border-radius: 14px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 20px rgba(26,82,118,.2);
+  }
+  .hero h1 { font-size: 24px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: .85; }
+
+  /* ── 圖例 ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center; margin-bottom: 32px;
+    padding: 16px 20px; background: #fff; border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px; font-size: 13.5px;
+  }
+  .legend-dot {
+    width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0;
+  }
+
+  /* ── 主流程 ── */
+  .flow { position: relative; }
+
+  /* 階段區塊 */
+  .stage {
+    position: relative;
+    margin-bottom: 8px;
+    padding-left: 72px;
+  }
+  .stage::before {
+    content: '';
+    position: absolute; left: 33px; top: 44px; bottom: -8px;
+    width: 3px; background: #bdc3c7;
+  }
+  .stage:last-child::before { display: none; }
+
+  .stage-num {
+    position: absolute; left: 12px; top: 12px;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800;
+    box-shadow: 0 2px 8px rgba(26,82,118,.25);
+    z-index: 2;
+  }
+
+  .stage-card {
+    background: #fff; border-radius: 12px;
+    padding: 20px 24px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    border-left: 5px solid var(--primary);
+  }
+  .stage-card h2 {
+    font-size: 17px; margin-bottom: 6px; color: var(--primary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .stage-card h2 .ch-label {
+    font-size: 12px; padding: 2px 8px; border-radius: 4px;
+    color: #fff; font-weight: 600;
+  }
+  .stage-card .desc {
+    font-size: 13.5px; color: #555; margin-bottom: 14px;
+  }
+
+  /* 子步驟流 */
+  .sub-flow {
+    display: flex; flex-wrap: wrap; align-items: stretch;
+    gap: 0; margin: 0;
+  }
+  .sub-step {
+    flex: 1 1 0;
+    min-width: 130px;
+    max-width: 200px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    text-align: center;
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px;
+  }
+  .sub-step .tool-name {
+    font-weight: 700; font-size: 11.5px; letter-spacing: .5px;
+  }
+  .sub-step .module-tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    background: rgba(0,0,0,.1); border-radius: 3px;
+    padding: 1px 6px; margin-top: 2px;
+  }
+  .sub-step .action { font-size: 12.5px; line-height: 1.5; }
+
+  /* 箭頭 */
+  .sub-arrow {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; flex-shrink: 0;
+    font-size: 20px; color: var(--arrow); font-weight: 700;
+  }
+
+  /* 工具顏色 */
+  .tool-consensus { background: var(--consensus-bg); border: 1.5px solid #aed6f1; }
+  .tool-consensus .tool-name { color: var(--consensus); }
+  .tool-nlm { background: var(--nlm-bg); border: 1.5px solid #a9dfbf; }
+  .tool-nlm .tool-name { color: var(--nlm); }
+  .tool-gpt { background: var(--gpt-bg); border: 1.5px solid #f5cba7; }
+  .tool-gpt .tool-name { color: var(--gpt); }
+  .tool-human { background: var(--human-bg); border: 1.5px solid #f5b7b1; }
+  .tool-human .tool-name { color: var(--human); }
+
+  /* ── 準備階段特殊 ── */
+  .prep-stage .stage-card {
+    border-left-color: var(--human);
+  }
+  .prep-stage .stage-num {
+    background: var(--human);
+  }
+
+  /* ── 章節色碼 ── */
+  .border-ch2 { border-left-color: #2980b9; }
+  .border-ch4 { border-left-color: #27ae60; }
+  .border-ch3 { border-left-color: #8e44ad; }
+  .border-ch5 { border-left-color: #e67e22; }
+  .border-ch1 { border-left-color: #c0392b; }
+  .border-abs { border-left-color: #16a085; }
+  .border-title { border-left-color: #7f8c8d; }
+  .num-ch2 { background: #2980b9 !important; }
+  .num-ch4 { background: #27ae60 !important; }
+  .num-ch3 { background: #8e44ad !important; }
+  .num-ch5 { background: #e67e22 !important; }
+  .num-ch1 { background: #c0392b !important; }
+  .num-abs { background: #16a085 !important; }
+  .num-title { background: #7f8c8d !important; }
+
+  /* ── 底部提醒 ── */
+  .bottom-note {
+    margin-top: 32px; padding: 20px 24px;
+    background: linear-gradient(135deg, #1a5276, #2980b9);
+    color: #fff; border-radius: 12px; font-size: 14.5px;
+    line-height: 1.9; text-align: center;
+    box-shadow: 0 4px 16px rgba(26,82,118,.2);
+  }
+  .bottom-note strong { color: #f9e79f; }
+
+  /* ── 整體流程圖概覽（頂部簡圖） ── */
+  .overview {
+    display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: center;
+    gap: 0; margin-bottom: 32px;
+    padding: 18px 16px; background: #fff;
+    border-radius: 12px; box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  }
+  .ov-box {
+    padding: 8px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 700;
+    text-align: center; color: #fff;
+    min-width: 80px;
+  }
+  .ov-arrow {
+    font-size: 18px; color: var(--arrow);
+    padding: 0 4px; font-weight: 700;
+  }
+
+  /* ── 每個子題循環提示 ── */
+  .loop-hint {
+    display: inline-block;
+    background: #fef9e7; border: 1px dashed #f39c12;
+    border-radius: 6px; padding: 4px 10px;
+    font-size: 12px; color: #b7950b; margin-top: 8px;
+  }
+
+  /* ── 響應式 ── */
+  @media (max-width: 700px) {
+    .page { padding: 16px 10px 40px; }
+    .stage { padding-left: 56px; }
+    .stage-num { left: 4px; width: 36px; height: 36px; font-size: 15px; }
+    .stage::before { left: 21px; }
+    .sub-flow { flex-direction: column; align-items: stretch; }
+    .sub-step { max-width: 100%; }
+    .sub-arrow { width: 100%; height: 24px; transform: rotate(90deg); }
+    .overview { flex-direction: column; }
+    .ov-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
+
+  @media print {
+    .page { max-width: 100%; padding: 12px; }
+    .stage-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ════════ 標題 ════════ -->
+<div class="hero">
+  <h1>ESG 論文 AI 協作寫作 — 全流程圖</h1>
+  <p>搭配「跨產業通用版 SOP V2」使用 ｜ 版本 2026-03-17</p>
+</div>
+
+<!-- ════════ 圖例 ════════ -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--human)"></div>你（人）</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--consensus)"></div>Consensus</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--nlm)"></div>NotebookLM</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gpt)"></div>ChatGPT</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#95a5a6"></div>模組代號（P1–P7）</div>
+</div>
+
+<!-- ════════ 寫作順序概覽 ════════ -->
+<div class="overview">
+  <div class="ov-box" style="background:#2980b9">① Ch2<br>文獻回顧</div>
+  <span class="ov-arrow">→</span>
+  <div class="ov-box" style="background:#27ae60">② Ch4<br>改善作為</div>
+  <span class="ov-arrow">→</span>
+  <div class="ov-box" style="background:#8e44ad">③ Ch3<br>研究設計</div>
+  <span class="ov-arrow">→</span>
+  <div class="ov-box" style="background:#e67e22">④ Ch5<br>結論建議</div>
+  <span class="ov-arrow">→</span>
+  <div class="ov-box" style="background:#c0392b">⑤ Ch1<br>緒論</div>
+  <span class="ov-arrow">→</span>
+  <div class="ov-box" style="background:#16a085">⑥ 摘要</div>
+  <span class="ov-arrow">→</span>
+  <div class="ov-box" style="background:#7f8c8d">⑦ 題目</div>
+</div>
+
+<!-- ════════ 流程開始 ════════ -->
+<div class="flow">
+
+<!-- ────── 步驟 0：準備 ────── -->
+<div class="stage prep-stage">
+  <div class="stage-num" style="background:var(--human)">0</div>
+  <div class="stage-card" style="border-left-color:var(--human)">
+    <h2>開始之前：填好你的研究設定表</h2>
+    <p class="desc">先把 15 個欄位填完，包括產業名稱、子題清單、研究問題、代表企業等。<br>這張表是所有提示詞的「變數來源」——沒填好，後面每一步都不準。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你自己</span>
+        <span class="action">選定產業<br>列子題清單<br>找代表企業</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你自己</span>
+        <span class="action">填寫研究設定表<br>全 15 欄</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step" style="background:#eaf2f8; border:1.5px solid #aed6f1;">
+        <span class="tool-name" style="color:var(--primary)">📋 設定表完成</span>
+        <span class="action">所有提示詞<br>變數就緒</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ①：第二章 ────── -->
+<div class="stage">
+  <div class="stage-num num-ch2">①</div>
+  <div class="stage-card border-ch2">
+    <h2>
+      <span class="ch-label" style="background:#2980b9">階段 A</span>
+      第二章 — 文獻回顧（每個子題重複此流程）
+    </h2>
+    <p class="desc">為每個 ESG 子題建立學術文獻基礎。全部子題（約 13 個）都要跑一輪下面的流程。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-consensus">
+        <span class="tool-name">Consensus</span>
+        <span class="module-tag">P1</span>
+        <span class="action">搜尋學術文獻<br>（每個子題 5–8 篇）</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">挑選文獻<br>下載 PDF</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-nlm">
+        <span class="tool-name">NotebookLM</span>
+        <span class="module-tag">P2</span>
+        <span class="action">閱讀 PDF<br>產出摘要卡</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">核對摘要卡<br>作者、年份、論點</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P3</span>
+        <span class="action">整合摘要卡<br>寫成正式段落</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">最終檢查<br>引用 ✓ 邏輯 ✓</span>
+      </div>
+    </div>
+    <div class="loop-hint">🔁 每個子題重複一次（E 環境 + S 社會 + G 治理 ≈ 13 個子題）</div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ②：第四章 ────── -->
+<div class="stage">
+  <div class="stage-num num-ch4">②</div>
+  <div class="stage-card border-ch4">
+    <h2>
+      <span class="ch-label" style="background:#27ae60">階段 B</span>
+      第四章 — 改善具體作為（每個子題重複此流程）
+    </h2>
+    <p class="desc">用 Consensus 找企業<strong>真實案例與最佳實務</strong>，不是從第二章文獻推導。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-consensus">
+        <span class="tool-name">Consensus</span>
+        <span class="module-tag">P4</span>
+        <span class="action">搜尋實際做法<br>案例、KPI、成效</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">篩選 3–5 個案例<br>核對數據來源</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">補國際準則<br>法規依據</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P5</span>
+        <span class="action">寫改善方案<br>制度＋流程＋技術＋KPI</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">檢查可執行性<br>整理彙整表</span>
+      </div>
+    </div>
+    <div class="loop-hint">🔁 每個子題重複一次（共 ≈ 13 個子題）</div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ③：第三章 ────── -->
+<div class="stage">
+  <div class="stage-num num-ch3">③</div>
+  <div class="stage-card border-ch3">
+    <h2>
+      <span class="ch-label" style="background:#8e44ad">階段 C</span>
+      第三章 — 研究設計
+    </h2>
+    <p class="desc">回頭把「你怎麼做這個研究」和「產業價值鏈怎麼切」說清楚。屬於資料整理型。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">整理研究架構<br>畫流程草圖</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">整理價值鏈表<br>代表企業資料</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P7</span>
+        <span class="action">把資料轉成<br>正式論文段落</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">確認與實際<br>研究步驟一致</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ④：第五章 ────── -->
+<div class="stage">
+  <div class="stage-num num-ch5">④</div>
+  <div class="stage-card border-ch5">
+    <h2>
+      <span class="ch-label" style="background:#e67e22">階段 D</span>
+      第五章 — 結論、建議、未來研究
+    </h2>
+    <p class="desc">整合型章節——把第四章改善作為濃縮成結論，再推導建議與後續研究。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">從 Ch4 提煉<br>每題 1 句結論</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P6</span>
+        <span class="action">整合成結論<br>+ 建議 + 未來方向</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">確認是整合<br>不是逐條搬</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ⑤：第一章 ────── -->
+<div class="stage">
+  <div class="stage-num num-ch1">⑤</div>
+  <div class="stage-card border-ch1">
+    <h2>
+      <span class="ch-label" style="background:#c0392b">階段 E</span>
+      第一章 — 緒論
+    </h2>
+    <p class="desc">回頭替整篇論文寫引言——等 Ch2–Ch5 都穩定了，才寫背景動機和研究目的。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">整理 Ch2 缺口<br>+ Ch4 方向摘要</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P6</span>
+        <span class="action">寫背景動機<br>研究問題與目的</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P7</span>
+        <span class="action">寫研究流程</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">確認問題<br>能追溯到後面章節</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ⑥：摘要 ────── -->
+<div class="stage">
+  <div class="stage-num num-abs">⑥</div>
+  <div class="stage-card border-abs">
+    <h2>
+      <span class="ch-label" style="background:#16a085">階段 F</span>
+      摘要
+    </h2>
+    <p class="desc">全文定稿後，濃縮成 300–500 字。涵蓋：背景、目的、方法、發現、結論。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">各章提煉<br>1–2 句重點</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-gpt">
+        <span class="tool-name">ChatGPT</span>
+        <span class="module-tag">P6</span>
+        <span class="action">寫 300–500 字<br>結構化摘要</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">檢查五要素<br>+ 關鍵字 3–5 個</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────── 步驟 ⑦：題目 ────── -->
+<div class="stage">
+  <div class="stage-num num-title">⑦</div>
+  <div class="stage-card border-title">
+    <h2>
+      <span class="ch-label" style="background:#7f8c8d">階段 G</span>
+      題目定稿
+    </h2>
+    <p class="desc">最後根據全文實際內容，確認或微調論文題目。主要靠你自己判斷。</p>
+    <div class="sub-flow">
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">檢查題目<br>是否精準反映內容</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">確認和同學<br>有足夠區隔</span>
+      </div>
+      <div class="sub-arrow">→</div>
+      <div class="sub-step tool-human">
+        <span class="tool-name">👤 你</span>
+        <span class="action">指導教授<br>最終確認 ✅</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .flow end -->
+
+<!-- ════════ 底部提醒 ════════ -->
+<div class="bottom-note">
+  <strong>核心工作流</strong>：Consensus 搜 → NotebookLM 讀 → 你核對 → ChatGPT 寫<br>
+  真正決定論文品質的，不是 AI，而是你填進去的<strong>研究設定表</strong>，<br>
+  以及你對每一段 AI 產出的<strong>人工判斷與修正深度</strong>。
+</div>
+
+</div><!-- .page end -->
+</body>
+</html>
