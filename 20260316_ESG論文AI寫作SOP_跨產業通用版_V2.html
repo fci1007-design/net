@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESG 改善策略地圖論文 — AI 協作寫作 SOP（跨產業通用版 V2）</title>
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --surface: #ffffff;
+    --primary: #1a5276;
+    --primary-light: #2980b9;
+    --accent-e: #27ae60;
+    --accent-s: #e67e22;
+    --accent-g: #8e44ad;
+    --border: #dee2e6;
+    --text: #2c3e50;
+    --text-light: #6c757d;
+    --code-bg: #f0f4f8;
+    --warn: #e74c3c;
+    --toc-width: 280px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+
+  /* ── 側邊目錄 ── */
+  #toc-toggle { display: none; }
+  .toc-btn {
+    position: fixed; top: 16px; left: 16px; z-index: 1100;
+    background: var(--primary); color: #fff; border: none; border-radius: 8px;
+    padding: 8px 14px; font-size: 15px; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .toc-btn:hover { background: var(--primary-light); }
+  nav.toc {
+    position: fixed; top: 0; left: -320px; width: var(--toc-width);
+    height: 100vh; overflow-y: auto; background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 60px 18px 24px; z-index: 1000;
+    transition: left .3s ease; box-shadow: 2px 0 12px rgba(0,0,0,.08);
+  }
+  #toc-toggle:checked ~ nav.toc { left: 0; }
+  nav.toc h3 { font-size: 14px; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  nav.toc a {
+    display: block; padding: 5px 0; font-size: 13.5px;
+    color: var(--text); text-decoration: none; border-bottom: 1px solid #f0f0f0;
+  }
+  nav.toc a:hover { color: var(--primary-light); }
+  nav.toc a.l2 { padding-left: 16px; font-size: 13px; color: var(--text-light); }
+  nav.toc a.l3 { padding-left: 32px; font-size: 12.5px; color: var(--text-light); }
+
+  /* ── 主內容 ── */
+  main {
+    max-width: 900px; margin: 0 auto; padding: 32px 24px 80px;
+  }
+
+  /* 頁首 banner */
+  header.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff; padding: 40px 36px; border-radius: 12px; margin-bottom: 36px;
+    box-shadow: 0 4px 20px rgba(26,82,118,.25);
+  }
+  header.hero h1 { font-size: 26px; margin-bottom: 12px; }
+  header.hero .meta { font-size: 14px; opacity: .85; line-height: 1.7; }
+
+  /* 區段標題 */
+  h2 {
+    font-size: 22px; color: var(--primary); margin: 48px 0 16px;
+    padding-bottom: 8px; border-bottom: 3px solid var(--primary-light);
+  }
+  h3 { font-size: 18px; color: var(--primary); margin: 32px 0 12px; }
+  h4 { font-size: 16px; margin: 20px 0 8px; color: #34495e; }
+
+  p { margin: 10px 0; }
+
+  /* 表格 */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14.5px; background: var(--surface);
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  thead th {
+    background: var(--primary); color: #fff;
+    padding: 10px 14px; text-align: left; font-weight: 600;
+  }
+  tbody td {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #f1f7fc; }
+
+  /* 設定表：可填寫欄位高亮 */
+  table.settings-table td:nth-child(3) {
+    background: #fffde7; min-width: 140px; text-align: center; font-weight: 600;
+  }
+
+  /* 程式碼/提示詞區塊 */
+  .prompt-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid var(--primary-light);
+    border-radius: 8px; padding: 20px 24px; margin: 14px 0 20px;
+    font-size: 14px; line-height: 1.85; white-space: pre-wrap;
+    word-break: break-word;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  }
+  .prompt-block .prompt-label {
+    display: inline-block; background: var(--primary-light); color: #fff;
+    font-size: 12px; padding: 2px 10px; border-radius: 4px;
+    margin-bottom: 12px; font-weight: 600;
+  }
+
+  /* 流程步驟 code */
+  pre.steps {
+    background: var(--code-bg); border-radius: 8px; padding: 18px 22px;
+    font-size: 14px; line-height: 1.8; overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+
+  /* 折疊面板（提示詞模組） */
+  details {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; margin: 14px 0; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  details summary {
+    padding: 14px 20px; font-weight: 700; cursor: pointer;
+    background: #f7f9fb; list-style: none; font-size: 16px;
+  }
+  details summary::before { content: "▸ "; color: var(--primary-light); }
+  details[open] summary::before { content: "▾ "; }
+  details summary::-webkit-details-marker { display: none; }
+  details > .inner { padding: 6px 20px 20px; }
+
+  /* 標籤 badge */
+  .badge {
+    display: inline-block; font-size: 12px; padding: 2px 8px;
+    border-radius: 4px; font-weight: 600; margin-right: 4px;
+  }
+  .badge-e { background: #d5f5e3; color: #1e8449; }
+  .badge-s { background: #fdebd0; color: #b9770e; }
+  .badge-g { background: #e8daef; color: #6c3483; }
+  .badge-ai { background: #d6eaf8; color: #1a5276; }
+  .badge-nlm { background: #e8f8f5; color: #0e6655; }
+
+  /* 品質檢查清單 */
+  ul.checklist { list-style: none; padding-left: 0; margin: 12px 0; }
+  ul.checklist li {
+    padding: 6px 0 6px 28px; position: relative; font-size: 14.5px;
+  }
+  ul.checklist li::before {
+    content: "☐"; position: absolute; left: 2px; top: 6px;
+    font-size: 16px; color: var(--primary-light);
+  }
+
+  /* 禁止表 */
+  .dont td:first-child { color: var(--warn); font-weight: 700; text-align: center; }
+
+  /* blockquote 重點提示 */
+  blockquote {
+    background: #eaf2f8; border-left: 4px solid var(--primary-light);
+    padding: 14px 20px; margin: 16px 0; border-radius: 0 8px 8px 0;
+    font-size: 15px; color: #2c3e50;
+  }
+  blockquote strong { color: var(--primary); }
+
+  /* 結尾金句 */
+  .final-note {
+    background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+    color: #fff; padding: 28px 32px; border-radius: 12px;
+    margin-top: 48px; font-size: 15.5px; line-height: 2;
+    box-shadow: 0 4px 16px rgba(26,82,118,.2);
+  }
+  .final-note strong { color: #f9e79f; }
+
+  /* 順序號碼圈 */
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary-light); color: #fff;
+    font-size: 14px; font-weight: 700; margin-right: 6px;
+  }
+
+  /* 響應式 */
+  @media (max-width: 640px) {
+    main { padding: 16px 12px 60px; }
+    header.hero { padding: 24px 20px; }
+    header.hero h1 { font-size: 20px; }
+    table { font-size: 13px; }
+    .prompt-block { padding: 14px 16px; font-size: 13px; }
+  }
+
+  /* 列印 */
+  @media print {
+    nav.toc, .toc-btn { display: none; }
+    main { max-width: 100%; }
+    details { break-inside: avoid; }
+    details[open] summary ~ * { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 側邊目錄 -->
+<input type="checkbox" id="toc-toggle">
+<label class="toc-btn" for="toc-toggle">☰ 目錄</label>
+<nav class="toc">
+  <h3>目錄導覽</h3>
+  <a href="#sec0">〇、寫作順序與邏輯</a>
+  <a href="#sec1">一、AI 工具分工原則</a>
+  <a href="#sec2">二、研究設定表</a>
+  <a href="#sec3">三、提示詞模組庫</a>
+  <a class="l2" href="#p1">P1 文獻搜尋（Consensus）</a>
+  <a class="l2" href="#p2">P2 文獻摘要卡（NotebookLM）</a>
+  <a class="l2" href="#p3">P3 文獻整合潤飾（ChatGPT）</a>
+  <a class="l2" href="#p4">P4 改善實務搜尋（Consensus）</a>
+  <a class="l2" href="#p5">P5 改善作為撰寫（ChatGPT）</a>
+  <a class="l2" href="#p6">P6 整合型章節（ChatGPT）</a>
+  <a class="l2" href="#p7">P7 資料轉正式論文（ChatGPT）</a>
+  <a href="#sec4">四、逐章逐節 SOP</a>
+  <a class="l2" href="#stageA">階段 A：第二章 文獻回顧</a>
+  <a class="l2" href="#stageB">階段 B：第四章 改善作為</a>
+  <a class="l2" href="#stageC">階段 C：第三章 研究設計</a>
+  <a class="l2" href="#stageD">階段 D：第五章 結論建議</a>
+  <a class="l2" href="#stageE">階段 E：第一章 緒論</a>
+  <a class="l2" href="#stageF">階段 F：摘要</a>
+  <a class="l2" href="#stageG">階段 G：題目定稿</a>
+  <a href="#sec5">五、全流程總覽表</a>
+  <a href="#sec6">六、防撞稿方法</a>
+  <a href="#sec7">七、教師檢查點</a>
+  <a href="#sec8">八、總結</a>
+</nav>
+
+<main>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<header class="hero">
+  <h1>ESG 改善策略地圖論文<br>AI 協作寫作 SOP（跨產業通用版）</h1>
+  <div class="meta">
+    <strong>來源：</strong>逆向工程分析「自行車產業ESG改善策略地圖之研究」<br>
+    <strong>目的：</strong>將該論文的 AI 協作寫作流程，拆解為任何產業都能套用的步驟化 SOP<br>
+    <strong>適用對象：</strong>以 ESG 為主題、以文獻回顧＋策略建議為主軸的碩士論文<br>
+    <strong>版本：</strong>2026-03-17 V2
+  </div>
+</header>
+
+<!-- ════════════════════ 〇、寫作順序 ════════════════════ -->
+<h2 id="sec0">〇、寫作順序與邏輯說明</h2>
+<p><strong>這篇論文不是照章節順序寫的。</strong>最合理的 AI 協作順序是：</p>
+<pre class="steps">第二章（文獻回顧）→ 第四章（改善作為）→ 第三章（研究設計）→ 第五章（結論建議）→ 第一章（緒論）→ 摘要 → 題目</pre>
+
+<p>判斷依據：</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>順序</th><th>章節</th><th>為什麼排在這裡</th></tr></thead>
+  <tbody>
+    <tr><td><span class="step-num">①</span></td><td><strong>第二章</strong> 文獻回顧與理論基礎</td><td>一切的基礎——先找文獻、建立 ESG 指標架構、替每個子題累積學術根據</td></tr>
+    <tr><td><span class="step-num">②</span></td><td><strong>第四章</strong> ESG 指標改善具體作為</td><td>有了文獻基礎後，透過搜尋實際案例與產業最佳實務，為每個子題建立可落地的改善方案</td></tr>
+    <tr><td><span class="step-num">③</span></td><td><strong>第三章</strong> 研究設計</td><td>寫完文獻與改善作為後，回頭把「研究怎麼做」與「產業價值鏈怎麼切」講清楚</td></tr>
+    <tr><td><span class="step-num">④</span></td><td><strong>第五章</strong> 結論、建議與未來研究</td><td>把第四章全部改善作為濃縮成結論，再從研究限制推出未來方向</td></tr>
+    <tr><td><span class="step-num">⑤</span></td><td><strong>第一章</strong> 緒論</td><td>回頭「替整篇論文寫序」——背景動機、研究問題、研究目的都是在替第二～四章鋪路</td></tr>
+    <tr><td><span class="step-num">⑥</span></td><td><strong>摘要</strong></td><td>等全文定稿後，才能精準濃縮整篇論文的核心內容</td></tr>
+    <tr><td><span class="step-num">⑦</span></td><td><strong>題目</strong></td><td>最後根據實際完成的內容，確認或微調論文題目</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ════════════════════ 一、AI 工具分工 ════════════════════ -->
+<h2 id="sec1">一、AI 工具分工原則</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>角色</th><th>負責什麼</th><th>注意事項</th></tr></thead>
+  <tbody>
+    <tr><td><strong>你（人）</strong></td><td>決定題目、產業範圍、研究問題；篩選文獻品質；核對引用；補產業資料；最終把關</td><td>AI 不能替你做「選擇」和「判斷」</td></tr>
+    <tr><td><span class="badge badge-ai">Consensus</span></td><td>搜尋學術文獻、搜尋實際改善案例與最佳實務、做初步主題聚類</td><td>用來「找文獻」和「找實際做法」，不用來寫正式段落</td></tr>
+    <tr><td><span class="badge badge-nlm">NotebookLM</span></td><td>閱讀完整文獻 PDF、產出結構化摘要卡、標記重點段落與核心發現</td><td>把文獻丟進去讓它幫你讀，產出摘要卡後仍須人工核對</td></tr>
+    <tr><td><span class="badge badge-ai">ChatGPT</span></td><td>把摘要卡改寫成正式學術段落、整合跨文獻論述、潤飾語氣邏輯、撰寫整合型章節</td><td>需要你提供「摘要卡」或「素材」才啟動，不要讓它空手寫</td></tr>
+  </tbody>
+</table>
+</div>
+<blockquote><strong>關鍵原則</strong>：Consensus 找材料 → NotebookLM 閱讀整理成摘要卡 → 人篩選核對 → ChatGPT 改寫成論文。四步分開做，不要混在一起。</blockquote>
+
+<!-- ════════════════════ 二、研究設定表 ════════════════════ -->
+<h2 id="sec2">二、開始之前：填寫你的研究設定表</h2>
+<blockquote>以下欄位越具體，AI 產出的內容越貼合你的論文，也越不會和同學撞稿。<br><strong>論文題目先寫個大概就好</strong>，可以寫細一點，但先不要拘泥通不通順，等全文完成後再回來調整。</blockquote>
+<div class="table-wrap">
+<table class="settings-table">
+  <thead><tr><th>欄位代號</th><th>說明</th><th>你的填寫</th><th>可變化方向</th></tr></thead>
+  <tbody>
+    <tr><td><code>＿論文題目＿</code></td><td>你的研究題目（先寫大概，最後再調整）</td><td></td><td>帶上研究角度，不要只寫大產業名</td></tr>
+    <tr><td><code>＿產業名稱＿</code></td><td>例：半導體封測、紡織染整、觀光旅宿</td><td></td><td>可細分到子產業或特定環節</td></tr>
+    <tr><td><code>＿研究地區＿</code></td><td>例：臺灣、東南亞、歐盟、全球供應鏈</td><td></td><td>同產業可換地區</td></tr>
+    <tr><td><code>＿價值鏈範圍＿</code></td><td>例：上游原料、中游製造、下游品牌通路</td><td></td><td>同產業可只切某一段</td></tr>
+    <tr><td><code>＿企業類型＿</code></td><td>例：上市櫃、中小企業、出口導向、品牌商</td><td></td><td>企業類型不同，改善作為完全不同</td></tr>
+    <tr><td><code>＿研究期間＿</code></td><td>例：2020–2025、後疫情時期</td><td></td><td>時間切片決定文獻範圍</td></tr>
+    <tr><td><code>＿ESG 分析框架＿</code></td><td>例：TESG、GRI、SASB、ISSB、TCFD</td><td></td><td>可依指導教授建議選擇</td></tr>
+    <tr><td><code>＿環境子題清單＿</code></td><td>列出環境構面 3～5 個子題</td><td></td><td>例：能源、廢棄物、水資源、碳排</td></tr>
+    <tr><td><code>＿社會子題清單＿</code></td><td>列出社會構面 3～5 個子題</td><td></td><td>例：資安、勞安、人力、產品安全</td></tr>
+    <tr><td><code>＿治理子題清單＿</code></td><td>列出治理構面 3～5 個子題</td><td></td><td>例：利害關係人、資訊透明度</td></tr>
+    <tr><td><code>＿研究問題＿</code></td><td>3～5 個核心問題</td><td></td><td>不要全班共用同一組問句</td></tr>
+    <tr><td><code>＿代表企業＿</code></td><td>3～5 家指標性企業</td><td></td><td>這是避免撞稿的關鍵之一</td></tr>
+    <tr><td><code>＿國際準則＿</code></td><td>3～5 個國際標準</td><td></td><td>例：ISO 50001、GRI、SBTi、TCFD</td></tr>
+    <tr><td><code>＿產業特性＿</code></td><td>1～2 句話描述你的產業核心特徵</td><td></td><td>例：高耗能高碳排、高勞力密集</td></tr>
+    <tr><td><code>＿差異化案例＿</code></td><td>你自己找的獨特事件或企業實務</td><td></td><td><strong>最重要的防撞稿欄位</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>範例：OO 產業的研究設定表（僅供參考）</h3>
+<blockquote><strong>研究主軸摘要</strong>：本研究以臺灣 OO 產業為研究對象，採用 TESG 評鑑架構，透過文獻探討與實際案例分析，針對環境（E）、社會（S）、治理（G）三大構面共 13 個子題，建構一套涵蓋上中下游價值鏈的 ESG 改善策略地圖，提出具體可執行的改善方案供產業實務參考。</blockquote>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>欄位代號</th><th>範例填寫</th></tr></thead>
+  <tbody>
+    <tr><td><code>＿論文題目＿</code></td><td>OO 產業 ESG 改善策略地圖之研究</td></tr>
+    <tr><td><code>＿產業名稱＿</code></td><td>OO 產業</td></tr>
+    <tr><td><code>＿研究地區＿</code></td><td>臺灣</td></tr>
+    <tr><td><code>＿價值鏈範圍＿</code></td><td>上游零組件製造、中游整車組裝、下游品牌通路</td></tr>
+    <tr><td><code>＿企業類型＿</code></td><td>全球供應鏈中的臺灣製造商（含上市櫃與中小企業）</td></tr>
+    <tr><td><code>＿研究期間＿</code></td><td>2020–2025</td></tr>
+    <tr><td><code>＿ESG 分析框架＿</code></td><td>TESG</td></tr>
+    <tr><td><code>＿環境子題清單＿</code></td><td>能源管理、廢棄物管理、水資源管理、溫室氣體排放</td></tr>
+    <tr><td><code>＿社會子題清單＿</code></td><td>資訊安全、職業安全與健康、人力統計、產品安全、人權與社區</td></tr>
+    <tr><td><code>＿治理子題清單＿</code></td><td>利害關係人、資訊透明度、商業模式創新、控制權</td></tr>
+    <tr><td><code>＿研究問題＿</code></td><td>① OO 產業在環境面的關鍵 ESG 風險為何？應採取哪些改善策略？ ② 社會面的具體改善作為如何設計才能兼顧供應鏈各環節？ ③ 治理面如何透過制度與資訊揭露提升整體 ESG 績效？</td></tr>
+    <tr><td><code>＿代表企業＿</code></td><td>巨○、美○達、○○工業、○○輪胎、○○精機</td></tr>
+    <tr><td><code>＿國際準則＿</code></td><td>GRI、TCFD、ISO 50001、ISO 45001、SBTi</td></tr>
+    <tr><td><code>＿產業特性＿</code></td><td>高度出口依賴、供應鏈長且跨國、面臨歐盟碳邊境調整機制（CBAM）與綠色供應鏈要求</td></tr>
+    <tr><td><code>＿差異化案例＿</code></td><td>歐盟 CBAM 對 OO 產業零組件出口的衝擊分析；品牌商永續採購政策對臺灣代工廠的連鎖效應</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ════════════════════ 三、提示詞模組庫 ════════════════════ -->
+<h2 id="sec3">三、提示詞模組庫</h2>
+<p>以下 7 個模組是整篇論文的「積木」。每個章節的 SOP 都會告訴你該用哪幾塊積木組裝。</p>
+
+<!-- P1 -->
+<details id="p1">
+  <summary>【模組 P1】文獻搜尋提示詞 — 給 Consensus</summary>
+  <div class="inner">
+    <p><span class="badge badge-ai">Consensus</span> <strong>用途</strong>：搜尋特定子題的學術文獻，產出初步整理</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+請針對「＿產業名稱＿」在「＿子題名稱＿」上的 ESG 相關議題，搜尋學術文獻。
+
+搜尋條件：
+1. 時間範圍以 ＿研究期間＿ 為主。
+2. 系統性文獻回顧、實證研究。
+3. 若「＿產業名稱＿」的直接文獻不足，可納入相近產業的研究。
+4. 每篇文獻請整理：
+   - 題名、作者、年份
+   - 研究方法
+   - 核心發現
+   - 對本研究哪個問題最有幫助
+5. 若文獻與 ＿國際準則＿ 有連結，請特別標記。
+6. 最後請輸出一段 300～500 字的初步文獻討論草稿。
+
+重要限制：不要虛構文獻。若查無足夠結果，請說明並建議替代搜尋方向。</div>
+  </div>
+</details>
+
+<!-- P2 -->
+<details id="p2">
+  <summary>【模組 P2】文獻摘要卡提示詞 — 給 NotebookLM</summary>
+  <div class="inner">
+    <p><span class="badge badge-nlm">NotebookLM</span> <strong>用途</strong>：讓 NotebookLM 閱讀文獻 PDF，整理成結構化的摘要卡，作為後續寫作材料</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+請根據來源檔案文獻資料，整理成一張適合學術寫作使用的結構化摘要卡。
+
+請輸出以下欄位：
+1. APA 格式完整書目
+2. 研究問題
+3. 研究對象與樣本
+4. 研究方法（量化/質化/混合/文獻回顧）
+5. 核心發現（3～5 點）
+6. 對「＿產業名稱＿」在「＿子題名稱＿」的啟示
+7. 可被改寫為文獻回顧段落的重點句（2～3 句）</div>
+  </div>
+</details>
+
+<!-- P3 -->
+<details id="p3">
+  <summary>【模組 P3】文獻整合與學術潤飾提示詞 — 給 ChatGPT</summary>
+  <div class="inner">
+    <p><span class="badge badge-ai">ChatGPT</span> <strong>用途</strong>：把摘要卡排列組合、整合成正式的第二章論文段落</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+你現在是學術論文寫作助理。
+請把以下文獻摘要卡，整合成「＿章節名稱＿」的正式論文段落。
+
+寫作要求：
+1. 繁體中文，碩士論文的學術語氣（不要口語、不要條列式摘要）
+2. 段落結構：
+   第一段：說明本節議題的重要性與研究必要性
+   中間段：整理各文獻的研究發現，做出比較與歸納
+   倒數段：指出現有研究的不足或缺口
+   最後段：承上啟下，導向下一節或第四章
+3. 所有引用必須保留 APA 格式，不可新增我沒提供的文獻
+4. 若不同研究結論有衝突，要明確寫出差異而非迴避
+5. 每段 150～250 字，整節控制在 800～1200 字
+
+本節目標：
+＿用 1～2 句話說明這一節主要要表達什麼＿
+
+文獻摘要卡：
+[在這裡貼上摘要卡]</div>
+
+    <h4>補充參考：各節「本節目標」範例（以 OO 產業為例）</h4>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>章節</th><th>本節目標範例</th></tr></thead>
+      <tbody>
+        <tr><td>2-1 OO 產業概述</td><td>闡述 OO 產業的全球市場定位、供應鏈結構與近年轉型趨勢，說明該產業為何需要導入 ESG 管理</td></tr>
+        <tr><td>2-2 TESG 指標架構</td><td>介紹本研究採用的 ESG 評鑑框架，定義 E、S、G 三構面下各子題的內涵與管理意義</td></tr>
+        <tr><td>2-3-1 能源管理</td><td>整理 OO 產業在製造端能源使用與節能技術的研究成果，找出改善空間與文獻缺口</td></tr>
+        <tr><td>2-3-2 廢棄物管理</td><td>歸納各價值鏈環節的廢棄物特性與減量策略文獻，比較不同研究的發現差異</td></tr>
+        <tr><td>2-3-3 水資源管理</td><td>檢視 OO 產業的水資源使用現況與水風險管理相關研究</td></tr>
+        <tr><td>2-3-4 溫室氣體排放</td><td>整理碳排放計算、減碳路徑與碳中和目標的學術討論</td></tr>
+        <tr><td>2-4-1 資訊安全</td><td>探討數位轉型下 OO 產業面臨的資訊安全風險與防護機制</td></tr>
+        <tr><td>2-4-2 職業安全與健康</td><td>彙整製造業職安相關研究，聚焦 OO 產業常見的工廠安全議題</td></tr>
+        <tr><td>2-4-3 人力統計</td><td>分析 OO 產業的勞動力結構、多元化與人才發展文獻</td></tr>
+        <tr><td>2-4-4 產品安全</td><td>整理產品安全標準與消費者保護相關研究</td></tr>
+        <tr><td>2-4-5 人權與社區</td><td>檢視供應鏈人權議題與社區關係管理的學術探討</td></tr>
+        <tr><td>2-5-1 利害關係人</td><td>歸納利害關係人識別與溝通策略的研究成果</td></tr>
+        <tr><td>2-5-2 資訊透明度</td><td>整理 ESG 資訊揭露與透明度相關文獻</td></tr>
+        <tr><td>2-5-3 商業模式創新</td><td>探討永續商業模式在 OO 產業的應用與轉型路徑</td></tr>
+        <tr><td>2-5-4 控制權</td><td>分析公司治理結構與控制機制對 ESG 績效的影響</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</details>
+
+<!-- P4 -->
+<details id="p4">
+  <summary>【模組 P4】改善實務搜尋提示詞 — 給 Consensus（NEW）</summary>
+  <div class="inner">
+    <p><span class="badge badge-ai">Consensus</span> <strong>用途</strong>：針對每個 ESG 子題，搜尋企業實際採行的改善做法、最佳實務與成功案例</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+請搜尋「＿產業名稱＿」（或相近製造業）在「＿子題名稱＿」方面，
+企業實際採行的 ESG 改善做法、最佳實務（best practices）或成功案例。
+
+搜尋重點：
+1. 時間範圍以 ＿研究期間＿ 為主。
+2. 優先找有具體做法描述的實證研究或案例分析（case study）。
+3. 每個案例或做法請整理：
+   - 來源（作者、年份、研究對象）
+   - 改善做法的具體內容（制度、流程、技術、工具）
+   - 實施成效或量化指標（KPI、減量數據、成本效益）
+   - 適用對象（大型企業/中小企業/特定環節）
+4. 若該產業的直接案例不足，可納入相近產業的實務經驗。
+5. 若有對應的國際標準或法規依據（如 ＿國際準則＿），請標記。
+
+重要限制：
+- 不要虛構案例或數據。若資料不足請說明。
+- 著重「實際做了什麼」而非「應該做什麼」。</div>
+  </div>
+</details>
+
+<!-- P5 -->
+<details id="p5">
+  <summary>【模組 P5】改善作為撰寫提示詞 — 給 ChatGPT（NEW）</summary>
+  <div class="inner">
+    <p><span class="badge badge-ai">ChatGPT</span> <strong>用途</strong>：根據搜尋到的實際案例與產業做法，撰寫第四章每個子題的改善具體作為</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+請根據以下蒐集到的實際改善案例與產業做法，撰寫「＿子題名稱＿ 改善具體作為」。
+
+研究背景：
+- 產業：＿產業名稱＿
+- 地區：＿研究地區＿
+- 價值鏈：＿價值鏈範圍＿
+- 企業類型：＿企業類型＿
+
+撰寫結構：
+1. 開場（200字）：說明此議題在「＿產業名稱＿」面臨的風險、壓力與重要性
+2. 法規連結（100字）：對應的國際準則或法規框架（如 ＿國際準則＿）
+3. 改善面向（主體，每面向 200～300 字）：
+   根據蒐集到的實際案例，提出 3 個主要改善面向，每個面向都要包含：
+   - 制度面：政策、標準、責任分工
+   - 流程面：執行步驟、稽核、教育訓練
+   - 技術/工具面：系統、設備、平台
+   - 可量化指標：KPI、揭露指標、查證方式
+4. 收尾（150字）：說明這些作法如何提升 ESG 績效與產業競爭力
+
+參考資料：
+[貼上用 P4 在 Consensus 搜尋到的改善實務案例]
+[貼上你蒐集的產業鏈資料或法規筆記]
+
+限制：
+- 每個建議必須有實際案例支撐，不能只有「企業應重視」之類空話
+- 若某作法只適用大型企業，要標註適用範圍
+- 引用仍保留 APA 格式</div>
+  </div>
+</details>
+
+<!-- P6 -->
+<details id="p6">
+  <summary>【模組 P6】整合型章節提示詞 — 給 ChatGPT</summary>
+  <div class="inner">
+    <p><span class="badge badge-ai">ChatGPT</span> <strong>用途</strong>：撰寫第一章（緒論）與第五章（結論建議）這類不需要新文獻、而是整合前文的章節</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+請根據以下章節摘要資料，撰寫論文中的「＿章節名稱＿」。
+
+寫作要求：
+1. 繁體中文，學術論文語氣。
+2. 不要逐條重抄前文，要做思維層次的整合與收束。
+3.【若是第一章第一節】：順序為「全球趨勢 → 產業壓力 → 研究缺口 → 研究必要性」
+  【若是第一章第二節】：每個研究問題都要能對應到第二章或第四章的某個子題
+  【若是第一章第三節】：描述要和你實際做的步驟一致
+  【若是第五章第一節】：用 E、S、G 三面向濃縮最重要的發現
+  【若是第五章第二節】：挑跨構面、執行優先順序高的建議，不是照搬第四章
+  【若是第五章第三節】：從研究限制自然推導出後續研究題目
+4. 不可新增我沒提供的新文獻。
+5. 段落節奏：每段 150～250 字。
+
+本節目標：
+＿用 1～2 句話說明這一節主要要表達什麼＿
+
+可用資料：
+[貼上你從第二章、第四章、第五章整理出的重點摘要]
+[貼上研究限制或方法限制筆記（若寫第五章第三節）]</div>
+  </div>
+</details>
+
+<!-- P7 -->
+<details id="p7">
+  <summary>【模組 P7】資料轉正式論文提示詞 — 給 ChatGPT</summary>
+  <div class="inner">
+    <p><span class="badge badge-ai">ChatGPT</span> <strong>用途</strong>：把產業鏈資料、研究步驟、表格筆記等「原始資料」轉成第三章正式文字</p>
+    <div class="prompt-block"><span class="prompt-label">PROMPT</span>
+請根據以下資料，撰寫論文中的「＿章節名稱＿」。
+
+資料內容：
+[貼上：價值鏈表格、代表企業資料、政府統計數據、產業報告摘要、
+你整理的研究流程步驟]
+
+寫作要求：
+1. 繁體中文，正式學術語氣。
+2. 先說明本節目的。
+3. 再解釋資料來源、分類方式與涵蓋範圍。
+4. 若有上中下游或不同環節，要交代各環節在 ESG 上面臨的不同議題。
+5. 讓文字可直接放進論文正文，不是工作筆記格式。
+6. 若資料不足，請標示 [待補資料]，不要虛構。</div>
+  </div>
+</details>
+
+<!-- ════════════════════ 四、逐章逐節 SOP ════════════════════ -->
+<h2 id="sec4">四、逐章逐節 SOP（按寫作順序排列）</h2>
+
+<!-- ── 階段 A：第二章 ── -->
+<h3 id="stageA">▌階段 A：第二章 — 文獻回顧與理論基礎</h3>
+
+<h4>A-0｜本章目標</h4>
+<p>第二章要完成三件事：</p>
+<ol>
+  <li>交代 <code>＿產業名稱＿</code> 的產業背景與研究必要性</li>
+  <li>建立 <code>＿ESG 分析框架＿</code> 的指標架構（E、S、G 各有哪些子題）</li>
+  <li>為每個子題建立學術文獻基礎</li>
+</ol>
+
+<h4>A-1｜第二章第一節：產業現況</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>交代產業的市場地位、供應鏈結構、轉型升級歷程，以及為何需要關注 ESG</td></tr>
+    <tr><td><strong>AI 工具</strong></td><td>Consensus（P1）搜產業現況文獻 → NotebookLM（P2）閱讀整理 → 人補政府統計、產業報告 → ChatGPT（P3）潤飾</td></tr>
+    <tr><td><strong>你先準備</strong></td><td>產業報告/協會資料、政府統計、代表企業名單、產業特性描述</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P1 + P2 + P3</td></tr>
+    <tr><td><strong>要替換的欄位</strong></td><td><code>＿產業名稱＿</code>、<code>＿研究地區＿</code>、<code>＿產業特性＿</code>、<code>＿代表企業＿</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>A-2｜第二章第二節：ESG 分析框架指標建構</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>說明你選用哪套 ESG 分析框架，以及這套框架下 E、S、G 各包含哪些核心指標</td></tr>
+    <tr><td><strong>AI 工具</strong></td><td>Consensus（P1）搜框架相關文獻 → NotebookLM（P2）閱讀 → ChatGPT（P3）整理成定義性段落</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P1 + P2 + P3</td></tr>
+    <tr><td><strong>要替換的欄位</strong></td><td><code>＿ESG 分析框架＿</code>、<code>＿國際準則＿</code>、各子題清單</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>A-3｜第二章第三～五節：E、S、G 各子題相關研究</h4>
+<blockquote>這三節結構完全相同，只是主題不同。以下以一個子題為單位說明流程。</blockquote>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>建立「＿子題名稱＿」的學術文獻基礎：過去研究發現了什麼、有什麼缺口</td></tr>
+    <tr><td><strong>AI 工具</strong></td><td>Consensus（P1）搜文獻 → NotebookLM（P2）閱讀產出摘要卡 → ChatGPT（P3）寫正式段落</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P1 → P2 → P3</td></tr>
+    <tr><td><strong>要替換的欄位</strong></td><td><code>＿子題名稱＿</code>、<code>＿產業名稱＿</code>、<code>＿研究問題＿</code></td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>每個子題的標準作業流程</strong>（重複執行 N 次，N = 你的子題總數）：</p>
+<pre class="steps">步驟 1：用 P1 在 Consensus 搜尋 「＿產業名稱＿」+「＿子題名稱＿」+ ESG
+步驟 2：從搜尋結果中挑出 5～8 篇（不要只挑同一觀點的研究）
+步驟 3：把文獻丟進 NotebookLM，用 P2 產出摘要卡 → 人工核對作者、年份、論點是否與原文一致
+步驟 4：將摘要卡一起貼給 ChatGPT，用 P3 生成正式段落
+步驟 5：檢查產出段落的結構是否為：
+         「議題重要性 → 文獻發現整理 → 發現之間的比較與差異 → 研究缺口 → 導向第四章」
+步驟 6：人工最終檢查——引用有沒有亂加、論點有沒有被扭曲</pre>
+
+<h4>A-4｜第二章品質檢查清單</h4>
+<ul class="checklist">
+  <li>每個子題有 5～8 篇引用，不是只引 1～2 篇</li>
+  <li>文獻有做「比較」，不是每篇各寫一段互不連結</li>
+  <li>研究缺口有具體指出「缺什麼」，而不是只說「研究不足」</li>
+  <li>每節最後一段能銜接到第四章「那要怎麼改善」</li>
+  <li>所有引用都回原文核對過作者、年份、論點</li>
+</ul>
+
+<!-- ── 階段 B：第四章 ── -->
+<h3 id="stageB">▌階段 B：第四章 — ESG 指標改善具體作為</h3>
+
+<h4>B-0｜本章目標</h4>
+<p>第四章的核心任務是：<strong>為每個 ESG 子題找出實際可行的改善做法</strong>。這些做法來自企業真實案例、產業最佳實務與國際標準，而不是單純從文獻理論推導。</p>
+<p>第四章要產出：來自真實案例的改善面向、可對應的制度工具、可落地的流程與技術、可量化的 KPI 與揭露指標。</p>
+<blockquote><strong>第四章和第二章的關係</strong>：第二章建立「學術文獻基礎」，第四章則獨立搜尋「實務改善做法」。兩者互補——文獻告訴你「問題在哪」，實務告訴你「怎麼解決」。</blockquote>
+
+<h4>B-1｜每個子題改善作為的標準流程</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>為「＿子題名稱＿」找出企業實際採行的改善方案，並整理成可落地的建議</td></tr>
+    <tr><td><strong>AI 工具</strong></td><td>Consensus（P4）搜尋實際改善案例 → 人篩選核對 → ChatGPT（P5）撰寫正式段落</td></tr>
+    <tr><td><strong>你先準備</strong></td><td>①第二章該子題的文獻缺口 ②對應的國際準則/法規 ③產業鏈中該議題的實況資料</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P4 → P5</td></tr>
+    <tr><td><strong>要替換的欄位</strong></td><td><code>＿子題名稱＿</code>、<code>＿產業名稱＿</code>、<code>＿研究地區＿</code>、<code>＿價值鏈範圍＿</code>、<code>＿企業類型＿</code>、<code>＿國際準則＿</code></td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>標準作業流程</strong>：</p>
+<pre class="steps">步驟 1：用 P4 在 Consensus 搜尋該子題的實際改善做法與成功案例
+步驟 2：從搜尋結果中挑出 3～5 個具體案例（涵蓋不同規模或價值鏈環節）
+步驟 3：人工核對每個案例的來源、做法描述與數據是否正確
+步驟 4：查出該子題對應的國際標準或法規（例：ISO 50001、GRI 303）
+步驟 5：用 P5 提示詞，把案例 + 國際標準 + 產業情境一起餵給 ChatGPT
+步驟 6：檢查產出的改善面向，每個面向是否都包含：
+         ✓ 制度面（政策、標準、委員會、責任分工）
+         ✓ 執行面（流程、稽核、教育訓練、資料蒐集）
+         ✓ 技術面（系統、設備、數位工具）
+         ✓ 衡量面（KPI、揭露指標、查證方式）
+步驟 7：檢查改善作為是否真的適合你的 ＿企業類型＿ 和 ＿價值鏈範圍＿
+步驟 8：整理成表格（建議做成「改善作為彙整表」，放在每節最後）</pre>
+
+<h4>B-3｜第四章品質檢查清單</h4>
+<ul class="checklist">
+  <li>每個改善作為都有實際案例或最佳實務支撐，不是憑空推論</li>
+  <li>不是只有「企業應重視」，而是有具體的制度、流程、工具</li>
+  <li>有區分不同企業規模（大型/中小）的適用性</li>
+  <li>有考慮價值鏈環節差異（上游/中游/下游做法不同）</li>
+  <li>每節最後的彙整表格格式一致，方便讀者比較</li>
+  <li>KPI 是真的可量化的，而非模糊的形容詞</li>
+</ul>
+
+<!-- ── 階段 C：第三章 ── -->
+<h3 id="stageC">▌階段 C：第三章 — 研究設計</h3>
+
+<h4>C-0｜本章目標</h4>
+<p>第三章在這類論文中，不是複雜的方法論章節，而是把「研究怎麼做」和「產業價值鏈怎麼切」說清楚。它是資料整理型，不是文獻型。放在第四章之後寫，是因為你已經清楚知道研究的實際範圍和做法。</p>
+
+<h4>C-1｜第三章第一節：研究架構</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>說明本研究從文獻探索到策略地圖建構的階段性邏輯</td></tr>
+    <tr><td><strong>你先準備</strong></td><td>你的研究架構圖（草稿即可）、研究分幾個階段、每階段做什麼</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P7</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>C-2｜第三章第二節：價值鏈介紹</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>交代上中下游各做什麼，以及各環節面臨的 ESG 議題差異</td></tr>
+    <tr><td><strong>你先準備</strong></td><td>價值鏈表格、產業公協會資料、公司年報摘要</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P7</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>C-3｜第三章品質檢查清單</h4>
+<ul class="checklist">
+  <li>研究架構和你真的做的步驟一致</li>
+  <li>價值鏈各環節有說明 ESG 議題差異，不是只介紹產品</li>
+  <li>有配圖/配表，文字和圖表能互相對應</li>
+  <li>代表企業有實際資料支撐，不是隨便列名字</li>
+</ul>
+
+<!-- ── 階段 D：第五章 ── -->
+<h3 id="stageD">▌階段 D：第五章 — 結論、建議與未來研究方向</h3>
+
+<h4>D-0｜本章目標</h4>
+<p>第五章是「整合章」，不是「補資料章」。材料主要來自第四章，其次來自第二章。</p>
+
+<h4>D-1｜第五章第一節：研究結論</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>用 E、S、G 三面向，濃縮本研究最重要的發現</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P6</td></tr>
+    <tr><td><strong>P6 目標</strong></td><td>「以 E、S、G 三大面向，整合本研究在改善策略上的核心發現，點出從被動合規走向主動價值創造的關鍵轉換」</td></tr>
+  </tbody>
+</table>
+</div>
+<pre class="steps">步驟 1：把第四章每個子題的核心結論各寫成 1 句話（共 13 句左右）
+步驟 2：依 E、S、G 分組，每組歸納出 1 個核心主軸
+步驟 3：用 P6 請 ChatGPT 整合成 3～4 段正式結論
+步驟 4：確認不是逐條搬運，而是有「整合的論述邏輯」</pre>
+
+<h4>D-2｜第五章第二節：研究建議</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>向企業、政策制定者或利害關係人，提出最重要的行動建議</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P6</td></tr>
+    <tr><td><strong>P6 目標</strong></td><td>「從第四章改善作為中，挑出跨構面、優先順序最高的 3 項核心建議，並說明建議對象與預期效益」</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>D-3｜第五章第三節：未來研究方向</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>把本研究做不到的部分，轉成有價值的後續研究題目</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P6</td></tr>
+    <tr><td><strong>P6 目標</strong></td><td>「從本研究的 3 項限制出發，推導出 3 個值得後續深入的研究方向，每個方向要說明為什麼重要」</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>D-4｜第五章品質檢查清單</h4>
+<ul class="checklist">
+  <li>結論是整合性的，不是逐條搬第四章</li>
+  <li>建議有排優先順序，不是全部並列</li>
+  <li>未來研究方向和本研究的限制有對應關係</li>
+  <li>沒有偷偷加入前面章節沒提到的新文獻或新觀點</li>
+</ul>
+
+<!-- ── 階段 E：第一章 ── -->
+<h3 id="stageE">▌階段 E：第一章 — 緒論</h3>
+
+<h4>E-0｜本章目標</h4>
+<p>第一章是回頭「替整篇論文寫引言」，不是第一個寫的章節。必須等第二～五章都穩定了，才能準確地鋪陳背景、動機與研究目的。</p>
+
+<h4>E-1｜第一章第一節：研究背景與動機</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>從全球永續趨勢寫到產業壓力，再導出「為什麼非做這個研究不可」</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P6</td></tr>
+    <tr><td><strong>P6 目標</strong></td><td>「從全球 ESG 趨勢出發，聚焦到＿產業名稱＿面臨的永續壓力，點出現有研究的不足，說明為什麼需要建構 ESG 改善策略地圖」</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>段落順序（必須照做）</strong>：</p>
+<pre class="steps">第一段：全球 ESG 趨勢與制度壓力（SDGs、歐盟規範、投資人要求）
+第二段：＿產業名稱＿ 的產業特性與永續挑戰
+第三段：＿研究地區＿ 的政策背景與轉型壓力
+第四段：現有研究缺口 → 本研究的動機（3 點：釐清風險機會、建構策略地圖、提供具體路徑）</pre>
+
+<h4>E-2｜第一章第二節：研究問題與目的</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>把論文要回答的問題與要達成的成果寫清楚</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P6</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>寫法重點</strong>：每個研究問題都要能在第二章或第四章找到對應段落。</p>
+
+<h4>E-3｜第一章第三節：研究流程</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>說明本研究的實際執行步驟與分析邏輯</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P7</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>E-4｜第一章品質檢查清單</h4>
+<ul class="checklist">
+  <li>背景與動機的敘事有「漏斗形」邏輯（從大到小）</li>
+  <li>研究問題的每一題都能追溯到後面章節</li>
+  <li>研究目的和研究問題有對應，不是各說各話</li>
+  <li>研究流程和你實際操作一致</li>
+</ul>
+
+<!-- ── 階段 F：摘要 ── -->
+<h3 id="stageF">▌階段 F：摘要</h3>
+
+<h4>F-0｜本階段目標</h4>
+<p>摘要是整篇論文的濃縮版，必須等全文定稿後才能精準撰寫。一般碩士論文摘要約 300～500 字。</p>
+
+<h4>F-1｜摘要撰寫流程</h4>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>項目</th><th>內容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>本節要表達什麼</strong></td><td>用最精鍊的文字，讓讀者快速掌握整篇論文的研究背景、目的、方法、發現與結論</td></tr>
+    <tr><td><strong>你先準備</strong></td><td>①第一章的研究背景與目的 ②第三章的研究方法 ③第四章的核心改善作為 ④第五章的主要結論</td></tr>
+    <tr><td><strong>提示詞模組</strong></td><td>P6</td></tr>
+    <tr><td><strong>P6 目標</strong></td><td>「以 300～500 字濃縮本論文的研究背景、目的、方法、主要發現與結論建議」</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>摘要必須包含的五個要素</strong>：</p>
+<pre class="steps">1. 研究背景：1～2 句說明為什麼做這個研究
+2. 研究目的：1 句說明本研究要達成什麼
+3. 研究方法：1～2 句說明怎麼做的（文獻回顧、案例分析、策略地圖建構）
+4. 主要發現：3～5 句濃縮最重要的發現（可依 E、S、G 各 1 句）
+5. 結論與建議：1～2 句最核心的結論</pre>
+
+<h4>F-2｜摘要品質檢查清單</h4>
+<ul class="checklist">
+  <li>字數在 300～500 字之間</li>
+  <li>五個要素都有涵蓋，沒有遺漏</li>
+  <li>沒有出現論文正文中沒提到的內容</li>
+  <li>不含圖表、引用文獻或附註</li>
+  <li>關鍵字 3～5 個，涵蓋產業、ESG、研究方法</li>
+</ul>
+
+<!-- ── 階段 G：題目 ── -->
+<h3 id="stageG">▌階段 G：題目定稿</h3>
+
+<h4>G-0｜本階段目標</h4>
+<p>題目是讀者看到的第一行字，必須精準反映研究內容。在全文完成後做最後確認或微調。</p>
+
+<h4>G-1｜題目檢查要點</h4>
+<pre class="steps">1. 題目是否包含：產業名稱 + ESG + 研究方法或產出（如策略地圖）
+2. 題目是否和你實際研究的範圍一致（不要題目寫全產業，內容只做某環節）
+3. 字數是否精簡（中文建議 15～25 字）
+4. 是否有足夠辨識度，不會和同學的題目混淆</pre>
+<p><strong>範例格式</strong>：<code>＿產業名稱＿</code> ＋ ESG ＋ <code>＿研究產出＿</code> ＋之研究</p>
+
+<h4>G-2｜題目品質檢查清單</h4>
+<ul class="checklist">
+  <li>題目精準反映研究範圍，不過大也不過小</li>
+  <li>帶有研究產出的具體描述（如「策略地圖」「改善方案」）</li>
+  <li>和其他同學的題目有足夠區隔</li>
+  <li>指導教授已確認</li>
+</ul>
+
+<!-- ════════════════════ 五、全流程總覽表 ════════════════════ -->
+<h2 id="sec5">五、全流程總覽表</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>階段</th><th>寫作順序</th><th>章節名稱</th><th>主要輸入</th><th>主要輸出</th><th>AI 模組組合</th></tr></thead>
+  <tbody>
+    <tr><td>A</td><td><span class="step-num">①</span></td><td>第二章 文獻回顧</td><td>題目、框架、文獻</td><td>摘要卡 + 文獻回顧段落</td><td>P1 + P2 + P3</td></tr>
+    <tr><td>B</td><td><span class="step-num">②</span></td><td>第四章 改善作為</td><td>實際案例 + 國際準則</td><td>改善方案 + 第四章段落</td><td>P4 + P5</td></tr>
+    <tr><td>C</td><td><span class="step-num">③</span></td><td>第三章 研究設計</td><td>研究流程 + 價值鏈資料</td><td>研究架構 + 價值鏈介紹</td><td>P7</td></tr>
+    <tr><td>D</td><td><span class="step-num">④</span></td><td>第五章 結論建議</td><td>第四章重點 + 研究限制</td><td>結論 + 建議 + 未來方向</td><td>P6</td></tr>
+    <tr><td>E</td><td><span class="step-num">⑤</span></td><td>第一章 緒論</td><td>第二章缺口 + 第四章方向</td><td>背景動機 + 研究問題目的</td><td>P6</td></tr>
+    <tr><td>F</td><td><span class="step-num">⑥</span></td><td>摘要</td><td>全文各章重點</td><td>300～500 字摘要</td><td>P6</td></tr>
+    <tr><td>G</td><td><span class="step-num">⑦</span></td><td>題目</td><td>全文定稿內容</td><td>最終確認的論文題目</td><td>人工判斷</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ════════════════════ 六、防撞稿 ════════════════════ -->
+<h2 id="sec6">六、防止全班寫成同一篇的方法</h2>
+
+<h3>最少要讓每位同學自己決定的 4 件事</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>#</th><th>差異化項目</th><th>為什麼重要</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><strong>產業切法</strong></td><td>不要都用大產業名詞（例：不要都寫「電子業」，可以寫「IC 封測」或「PCB 製造」）</td></tr>
+    <tr><td>2</td><td><strong>子題排序與選擇</strong></td><td>不要全班都用同一組子題——你的產業可能資安不重要但生物多樣性很重要</td></tr>
+    <tr><td>3</td><td><strong>代表案例</strong></td><td>不要全班都舉同一家企業或同一個事件</td></tr>
+    <tr><td>4</td><td><strong>研究問題的句子</strong></td><td>即使方向類似，每個人用自己的話重新寫問句</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>絕對不要做的事</h3>
+<div class="table-wrap">
+<table class="dont">
+  <thead><tr><th>❌</th><th>為什麼不行</th></tr></thead>
+  <tbody>
+    <tr><td>❌</td><td>一開始就叫 AI 生整章——沒有文獻基礎的段落全是空話</td></tr>
+    <tr><td>❌</td><td>不做摘要卡，直接讓 AI 拼湊文獻——引用會不準確，論點會斷裂</td></tr>
+    <tr><td>❌</td><td>全班共用完全相同 prompt，只換 <code>＿產業名稱＿</code>——結構和措辭會高度雷同</td></tr>
+    <tr><td>❌</td><td>第四章只寫原則，不找實際案例——「改善具體作為」會變成「改善空泛口號」</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ════════════════════ 七、教師檢查 ════════════════════ -->
+<h2 id="sec7">七、教師/指導者檢查點</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>檢查面向</th><th>具體要看什麼</th></tr></thead>
+  <tbody>
+    <tr><td><strong>文獻真實性</strong></td><td>每一筆引用的作者、年份、期刊、論點，是否和原文吻合</td></tr>
+    <tr><td><strong>章節連動性</strong></td><td>第二章的缺口 → 是否導向第四章的改善方向；第四章的發現 → 是否濃縮為第五章結論</td></tr>
+    <tr><td><strong>改善作為來源</strong></td><td>第四章的改善做法是否有實際案例或最佳實務支撐，而非空泛推論</td></tr>
+    <tr><td><strong>寫作順序合理性</strong></td><td>是否先有文獻基礎（二→四），才回寫緒論（一）</td></tr>
+    <tr><td><strong>差異化程度</strong></td><td>「研究設定表」的填寫是否真的有屬於自己的產業範圍、案例與判斷</td></tr>
+    <tr><td><strong>改善可執行性</strong></td><td>第四章是否有制度、流程、工具、KPI 四個層次，而非只有「企業應重視」</td></tr>
+    <tr><td><strong>摘要完整性</strong></td><td>摘要是否涵蓋背景、目的、方法、發現、結論五要素</td></tr>
+    <tr><td><strong>AI 痕跡管理</strong></td><td>是否所有 AI 生成的段落都經過人工核對與修改，而非原封不動貼上</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ════════════════════ 八、總結 ════════════════════ -->
+<h2 id="sec8">八、一句話總結</h2>
+<div class="final-note">
+  <strong>這套 SOP 最值得複製的不是某一段提示詞，而是這個工作流</strong>：<br>
+  先用 Consensus 搜文獻、NotebookLM 讀文獻建立第二章 → 再用 Consensus 找實際案例寫成第四章 → 接著補完第三章研究設計 → 然後濃縮成第五章 → 之後回寫第一章 → 最後寫摘要、定題目。<br><br>
+  真正決定論文品質的，不是 AI 本身，而是你填進去的<strong>研究邊界、子題切法、案例選擇、國際標準組合</strong>，以及你對每一段產出的<strong>人工判斷與修正深度</strong>。
+</div>
+
+</main>
+</body>
+</html>
