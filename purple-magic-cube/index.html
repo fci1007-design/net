@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>紫晶機械魔方｜3D 模擬器</title>
+<style>
+:root{
+  --bg:#0b0712; --panel:rgba(22,13,35,.78); --panel2:rgba(32,18,52,.86);
+  --line:rgba(221,194,255,.16); --txt:#f7efff; --muted:#cdb8df;
+  --accent:#b46cff; --accent2:#7c3aed; --shadow:0 24px 80px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 70% 18%,#3c1762 0,#160b27 34%,#09060f 78%);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
+body{overflow:hidden}
+.app{height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px;padding:14px}
+.stage{position:relative;min-width:0;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:radial-gradient(circle at 64% 18%,rgba(187,118,255,.18),transparent 33%),linear-gradient(145deg,rgba(58,30,86,.38),rgba(9,6,15,.88));box-shadow:var(--shadow)}
+canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+canvas.dragging{cursor:grabbing}
+.brand{position:absolute;left:22px;top:18px;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+.brand h1{font-size:21px;margin:0 0 4px;font-weight:760;letter-spacing:.04em}
+.brand p{margin:0;color:var(--muted);font-size:12px}
+.tip{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:rgba(11,7,18,.64);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;padding:8px 13px;color:#e9dafa;font-size:12px;white-space:nowrap;pointer-events:none}
+.sidebar{display:flex;flex-direction:column;gap:12px;overflow:auto;padding-right:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;backdrop-filter:blur(18px);box-shadow:0 10px 34px rgba(0,0,0,.18)}
+.card h2{font-size:13px;margin:0 0 10px;color:#f0e2ff;letter-spacing:.06em}
+.toolbar{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+button{appearance:none;border:1px solid rgba(220,194,255,.18);background:linear-gradient(180deg,rgba(132,65,192,.28),rgba(71,32,109,.22));color:#f9f2ff;border-radius:12px;padding:9px 10px;font-weight:650;cursor:pointer;transition:.15s transform,.15s background,.15s border-color}
+button:hover{background:linear-gradient(180deg,rgba(169,91,238,.38),rgba(82,37,126,.28));border-color:rgba(220,194,255,.32)}
+button:active{transform:translateY(1px) scale(.99)}
+button.primary{background:linear-gradient(135deg,#9447ea,#6d28d9);border-color:#b985f0}
+.moves{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.moves button{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;padding:9px 5px}
+.status{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.metric{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:9px 10px}
+.metric span{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}
+.metric strong{font-size:14px}
+.row{display:flex;align-items:center;gap:10px;margin:10px 0}
+.row label{font-size:12px;color:var(--muted);min-width:72px}
+input[type=range]{width:100%;accent-color:#a855f7}
+.reference{display:grid;grid-template-columns:96px 1fr;gap:11px;align-items:center}
+.reference p{margin:0;color:var(--muted);font-size:11px;line-height:1.55}
+.legend{font-size:11px;color:var(--muted);line-height:1.7}
+kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;padding:2px 5px;border-radius:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin-top:10px}
+.switch input{width:38px;height:21px;appearance:none;background:#38204d;border-radius:999px;position:relative;outline:none;cursor:pointer;transition:.2s}
+.switch input:before{content:"";position:absolute;width:17px;height:17px;left:2px;top:2px;border-radius:50%;background:#d8c3e8;transition:.2s}
+.switch input:checked{background:#7c3aed}.switch input:checked:before{transform:translateX(17px);background:white}
+@media(max-width:850px){
+ body{overflow:auto}.app{height:auto;min-height:100dvh;grid-template-columns:1fr;padding:8px}.stage{height:64dvh;min-height:430px}.sidebar{overflow:visible}.tip{font-size:10px;bottom:10px}.brand{left:14px;top:13px}.brand h1{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="stage" id="stage">
+    <canvas id="cubeCanvas" aria-label="可操作 3D 魔術方塊"></canvas>
+    <div class="brand"><h1>紫晶機械魔方</h1><p>Purple Mechanical Cube · interactive prototype</p></div>
+    <div class="tip">拖曳：旋轉視角　｜　滾輪：縮放　｜　點一下外側色塊：順時針轉動　｜　Shift＋點擊：反向</div>
+  </section>
+
+  <aside class="sidebar">
+    <div class="card">
+      <h2>操作</h2>
+      <div class="status">
+        <div class="metric"><span>轉動步數</span><strong id="moveCount">0</strong></div>
+        <div class="metric"><span>目前狀態</span><strong id="stateText">已復原</strong></div>
+      </div>
+      <div class="toolbar">
+        <button class="primary" id="shuffleBtn">隨機打亂</button>
+        <button id="resetBtn">回復原狀</button>
+        <button id="undoBtn">上一步</button>
+        <button id="cameraBtn">重設視角</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>六面旋轉</h2>
+      <div class="moves" id="movePad"></div>
+      <div class="legend" style="margin-top:10px">符號採標準魔術方塊記號：U 上、D 下、L 左、R 右、F 前、B 後；<b>′</b> 代表逆時針。</div>
+    </div>
+
+    <div class="card">
+      <h2>模擬參數</h2>
+      <div class="row"><label>轉動速度</label><input id="speedRange" type="range" min="120" max="650" step="10" value="260"></div>
+      <div class="row"><label>零件間隙</label><input id="gapRange" type="range" min="100" max="122" step="1" value="106"></div>
+      <div class="switch"><span>自動展示旋轉</span><input id="autoSpin" type="checkbox"></div>
+      <div class="switch"><span>顯示軸心導線</span><input id="axisGuide" type="checkbox" checked></div>
+    </div>
+
+    <div class="card reference">
+      <div style="aspect-ratio:4/3;border-radius:14px;background:radial-gradient(circle at 70% 30%,#caa7ff 0,#7a35c8 35%,#27123c 75%);display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 40px rgba(255,255,255,.08)">
+        <div style="font-size:46px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))">🟪</div>
+      </div>
+      <p>外觀依紫色機械魔方概念重新抽象成可運作的 3×3 模型：深紫機械骨架、亮紫中心與六面不同紫階，方便辨識旋轉狀態。</p>
+    </div>
+
+    <div class="card legend">
+      <h2>快捷鍵</h2>
+      <div><kbd>U D L R F B</kbd> 旋轉對應面；按住 <kbd>Shift</kbd> 反向。</div>
+      <div><kbd>S</kbd> 打亂　<kbd>Z</kbd> 上一步　<kbd>0</kbd> 回復原狀。</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+(() => {
+'use strict';
+const canvas = document.getElementById('cubeCanvas');
+const ctx = canvas.getContext('2d');
+const stage = document.getElementById('stage');
+const moveCountEl = document.getElementById('moveCount');
+const stateTextEl = document.getElementById('stateText');
+const speedRange = document.getElementById('speedRange');
+const gapRange = document.getElementById('gapRange');
+const autoSpinEl = document.getElementById('autoSpin');
+const axisGuideEl = document.getElementById('axisGuide');
+
+let W=1,H=1,DPR=1;
+let yaw=-0.72, pitch=-0.48, distance=8.3;
+let isDragging=false, pointerId=null, downX=0,downY=0,lastX=0,lastY=0,moved=false;
+let spacing=1.06;
+let cubies=[];
+let visiblePickPolys=[];
+let history=[];
+let queue=[];
+let activeTurn=null;
+let moveCount=0;
+const CUBE_SIZE=0.91;
+const HALF=CUBE_SIZE/2;
+const PI=Math.PI;
+
+const faceColors={
+  px:['#7C3AED','#B981FF'], nx:['#4C1D95','#7C4CCB'],
+  py:['#C084FC','#E1B9FF'], ny:['#6D28D9','#9A65F0'],
+  pz:['#A855F7','#D48BFF'], nz:['#312E81','#655AC9']
+};
+const faceDefs=[
+ {k:'px',n:[1,0,0],v:[[1,-1,-1],[1,1,-1],[1,1,1],[1,-1,1]]},
+ {k:'nx',n:[-1,0,0],v:[[-1,-1,1],[-1,1,1],[-1,1,-1],[-1,-1,-1]]},
+ {k:'py',n:[0,1,0],v:[[-1,1,-1],[-1,1,1],[1,1,1],[1,1,-1]]},
+ {k:'ny',n:[0,-1,0],v:[[-1,-1,1],[-1,-1,-1],[1,-1,-1],[1,-1,1]]},
+ {k:'pz',n:[0,0,1],v:[[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]]},
+ {k:'nz',n:[0,0,-1],v:[[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]]}
+];
+
+const I=()=>[1,0,0,0,1,0,0,0,1];
+const mul=(A,B)=>[
+ A[0]*B[0]+A[1]*B[3]+A[2]*B[6],A[0]*B[1]+A[1]*B[4]+A[2]*B[7],A[0]*B[2]+A[1]*B[5]+A[2]*B[8],
+ A[3]*B[0]+A[4]*B[3]+A[5]*B[6],A[3]*B[1]+A[4]*B[4]+A[5]*B[7],A[3]*B[2]+A[4]*B[5]+A[5]*B[8],
+ A[6]*B[0]+A[7]*B[3]+A[8]*B[6],A[6]*B[1]+A[7]*B[4]+A[8]*B[7],A[6]*B[2]+A[7]*B[5]+A[8]*B[8]
+];
+const mv=(M,v)=>[M[0]*v[0]+M[1]*v[1]+M[2]*v[2],M[3]*v[0]+M[4]*v[1]+M[5]*v[2],M[6]*v[0]+M[7]*v[1]+M[8]*v[2]];
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+const scale=(v,s)=>[v[0]*s,v[1]*s,v[2]*s];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const lerp=(a,b,t)=>a+(b-a)*t;
+function rot(axis,a){const c=Math.cos(a),s=Math.sin(a);return axis==='x'?[1,0,0,0,c,-s,0,s,c]:axis==='y'?[c,0,s,0,1,0,-s,0,c]:[c,-s,0,s,c,0,0,0,1]}
+function roundMat(M){return M.map(v=>Math.abs(v)<1e-6?0:Math.round(v));}
+function cameraMat(){return mul(rot('x',pitch),rot('y',yaw));}
+function project(v,CM){const q=mv(CM,v), dep=distance-q[2], f=Math.min(W,H)*1.04;return {x:W/2+q[0]*f/dep,y:H/2-q[1]*f/dep,z:q[2],dep};}
+function resize(){const r=stage.getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
+window.addEventListener('resize',resize); resize();
+
+function buildCube(){
+ cubies=[];history=[];queue=[];activeTurn=null;moveCount=0;updateStatus();
+ for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)for(let z=-1;z<=1;z++){
+   const stickers={};
+   if(x===1)stickers.px=true;if(x===-1)stickers.nx=true;
+   if(y===1)stickers.py=true;if(y===-1)stickers.ny=true;
+   if(z===1)stickers.pz=true;if(z===-1)stickers.nz=true;
+   cubies.push({coord:[x,y,z],rot:I(),stickers,stickerCount:Object.keys(stickers).length});
+ }
+}
+function isSolved(){
+ for(const c of cubies){for(const f of faceDefs){if(!c.stickers[f.k])continue;const n=mv(c.rot,f.n);if(Math.round(n[0])!==f.n[0]||Math.round(n[1])!==f.n[1]||Math.round(n[2])!==f.n[2])return false;}}return true;
+}
+function updateStatus(){moveCountEl.textContent=moveCount;stateTextEl.textContent=isSolved()?'已復原':'已操作';}
+buildCube();
+
+function bodyGradient(poly, light=0){
+ const g=ctx.createLinearGradient(poly[0].x,poly[0].y,poly[2].x,poly[2].y);
+ g.addColorStop(0,light?'#2d1740':'#1d102c');g.addColorStop(1,light?'#130b1e':'#09060e');return g;
+}
+function stickerGradient(poly,colors){
+ const g=ctx.createLinearGradient(poly[0].x,poly[0].y,poly[2].x,poly[2].y);g.addColorStop(0,colors[1]);g.addColorStop(.52,colors[0]);g.addColorStop(1,'#2b123e');return g;
+}
+function insetLocal(face,amount=.10,offset=.012){
+ const center=[0,0,0];face.v.forEach(v=>{center[0]+=v[0];center[1]+=v[1];center[2]+=v[2]});center[0]/=4;center[1]/=4;center[2]/=4;
+ return face.v.map(v=>add(scale(add(scale(v,HALF),scale(center,HALF*amount/(1-amount))),1-amount),scale(face.n,offset)));
+}
+function localVerts(face){return face.v.map(v=>scale(v,HALF));}
+function cubieTransform(c,now){
+ let pos=scale(c.coord,spacing), R=c.rot;
+ if(activeTurn && activeTurn.set.has(c)){
+   const t=Math.min(1,(now-activeTurn.start)/activeTurn.duration);const e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+   const A=rot(activeTurn.axis,activeTurn.dir*PI/2*e);pos=mv(A,pos);R=mul(A,R);
+ }
+ return {pos,R};
+}
+function toWorld(local,T){return add(T.pos,mv(T.R,local));}
+function drawAxes(CM){
+ if(!axisGuideEl.checked)return;
+ const axes=[[[0,0,0],[2.25,0,0],'rgba(186,108,255,.16)'],[[0,0,0],[0,2.25,0],'rgba(221,180,255,.16)'],[[0,0,0],[0,0,2.25],'rgba(132,92,246,.14)']];
+ ctx.save();ctx.lineWidth=1;ctx.setLineDash([5,7]);
+ axes.forEach(([a,b,col])=>{const A=project(a,CM),B=project(b,CM);ctx.strokeStyle=col;ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();});ctx.restore();
+}
+function render(now){
+ requestAnimationFrame(render);
+ if(autoSpinEl.checked && !isDragging && !activeTurn){yaw+=0.0012;}
+ if(!activeTurn && queue.length) startTurn(queue.shift());
+ if(activeTurn && now-activeTurn.start>=activeTurn.duration) finishTurn();
+
+ ctx.clearRect(0,0,W,H);
+ const bg=ctx.createRadialGradient(W*.66,H*.20,20,W*.55,H*.50,Math.max(W,H)*.75);bg.addColorStop(0,'rgba(112,50,167,.18)');bg.addColorStop(.4,'rgba(37,18,58,.12)');bg.addColorStop(1,'rgba(5,3,9,.05)');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ const CM=cameraMat(); drawAxes(CM);
+ const polys=[];visiblePickPolys=[];
+ for(const c of cubies){
+   const T=cubieTransform(c,now);
+   for(const face of faceDefs){
+     const nW=mv(T.R,face.n);const center=toWorld(scale(face.n,HALF),T);const nV=mv(CM,nW);const cV=mv(CM,center);const toCam=[-cV[0],-cV[1],distance-cV[2]];
+     if(dot(nV,toCam)<=0)continue;
+     const pts3=localVerts(face).map(v=>toWorld(v,T));const pts=pts3.map(v=>project(v,CM));
+     polys.push({kind:'body',pts,depth:pts.reduce((s,p)=>s+p.dep,0)/4,c,face,T});
+     if(c.stickers[face.k]){
+       const s3=insetLocal(face,.10,.014).map(v=>toWorld(v,T));const sp=s3.map(v=>project(v,CM));
+       polys.push({kind:'sticker',pts:sp,depth:sp.reduce((s,p)=>s+p.dep,0)/4-.001,c,face,T,nW});
+     }
+   }
+ }
+ polys.sort((a,b)=>b.depth-a.depth);
+ for(const p of polys){
+   const pts=p.pts;ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);ctx.closePath();
+   if(p.kind==='body'){
+     ctx.fillStyle=bodyGradient(pts,p.c.stickerCount===0);ctx.fill();ctx.lineWidth=1.1;ctx.strokeStyle='rgba(182,120,224,.18)';ctx.stroke();
+   } else {
+     ctx.fillStyle=stickerGradient(pts,faceColors[p.face.k]);ctx.fill();ctx.lineWidth=1.15;ctx.strokeStyle='rgba(244,224,255,.36)';ctx.stroke();
+     ctx.save();ctx.globalAlpha=.18;ctx.strokeStyle='#fff';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(lerp(pts[0].x,pts[1].x,.08),lerp(pts[0].y,pts[1].y,.08));ctx.lineTo(lerp(pts[3].x,pts[2].x,.08),lerp(pts[3].y,pts[2].y,.08));ctx.stroke();ctx.restore();
+     if(p.c.stickerCount===3){ctx.strokeStyle='rgba(16,7,25,.46)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);ctx.lineTo(pts[2].x,pts[2].y);ctx.stroke();}
+     if(p.c.stickerCount===1){const cx=pts.reduce((s,q)=>s+q.x,0)/4,cy=pts.reduce((s,q)=>s+q.y,0)/4;const rr=Math.max(2,Math.min(8,Math.hypot(pts[0].x-pts[2].x,pts[0].y-pts[2].y)*.08));const rg=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);rg.addColorStop(0,'rgba(255,255,255,.55)');rg.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(cx,cy,rr,0,PI*2);ctx.fill();}
+     visiblePickPolys.push({pts,c:p.c,nW:p.nW});
+   }
+ }
+ ctx.save();ctx.globalCompositeOperation='destination-over';const sh=ctx.createRadialGradient(W*.5,H*.74,1,W*.5,H*.74,Math.min(W,H)*.26);sh.addColorStop(0,'rgba(0,0,0,.35)');sh.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=sh;ctx.beginPath();ctx.ellipse(W*.5,H*.75,Math.min(W,H)*.24,Math.min(W,H)*.08,0,0,PI*2);ctx.fill();ctx.restore();
+}
+requestAnimationFrame(render);
+
+function startTurn(m){
+ if(activeTurn)return;
+ const set=new Set(cubies.filter(c=>c.coord[m.axis==='x'?0:m.axis==='y'?1:2]===m.layer));
+ activeTurn={...m,set,start:performance.now(),duration:Number(speedRange.value)};
+}
+function finishTurn(){
+ const a=activeTurn;if(!a)return;const A=rot(a.axis,a.dir*PI/2);
+ a.set.forEach(c=>{c.coord=mv(A,c.coord).map(v=>Math.round(v));c.rot=roundMat(mul(A,c.rot));});
+ if(a.record!==false){history.push({axis:a.axis,layer:a.layer,dir:a.dir,label:a.label});moveCount++;}
+ activeTurn=null;updateStatus();
+}
+function enqueue(axis,layer,dir,label,record=true){queue.push({axis,layer,dir,label,record});}
+const defs={
+ U:['y',1,-1], D:['y',-1,1], L:['x',-1,1], R:['x',1,-1], F:['z',1,-1], B:['z',-1,1]
+};
+function doMove(notation,record=true){const prime=notation.includes("'")||notation.includes('′');const k=notation[0].toUpperCase();if(!defs[k])return;const [axis,layer,base]=defs[k];enqueue(axis,layer,prime?-base:base,notation,record);}
+
+const movePad=document.getElementById('movePad');
+['U','U′','D','D′','L','L′','R','R′','F','F′','B','B′'].forEach(n=>{const b=document.createElement('button');b.textContent=n;b.addEventListener('click',()=>doMove(n.replace('′',"'")));movePad.appendChild(b);});
+
+document.getElementById('shuffleBtn').addEventListener('click',()=>{
+ const keys=Object.keys(defs);let prev='';for(let i=0;i<20;i++){let k;do{k=keys[Math.floor(Math.random()*keys.length)]}while(k===prev);prev=k;doMove(k+(Math.random()<.5?"'":''));}
+});
+document.getElementById('resetBtn').addEventListener('click',buildCube);
+document.getElementById('cameraBtn').addEventListener('click',()=>{yaw=-.72;pitch=-.48;distance=8.3;});
+document.getElementById('undoBtn').addEventListener('click',()=>{
+ if(activeTurn||queue.length||!history.length)return;const m=history.pop();moveCount=Math.max(0,moveCount-1);updateStatus();enqueue(m.axis,m.layer,-m.dir,'undo',false);
+});
+gapRange.addEventListener('input',()=>{spacing=Number(gapRange.value)/100;});
+
+function pointInPoly(x,y,pts){let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const xi=pts[i].x,yi=pts[i].y,xj=pts[j].x,yj=pts[j].y;const intersect=((yi>y)!=(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi+1e-9)+xi);if(intersect)inside=!inside;}return inside;}
+function clickTurn(x,y,reverse=false){
+ if(activeTurn||queue.length)return;
+ for(let i=visiblePickPolys.length-1;i>=0;i--){const p=visiblePickPolys[i];if(!pointInPoly(x,y,p.pts))continue;
+   const n=p.nW;let axis='x',idx=0;if(Math.abs(n[1])>Math.abs(n[idx])){axis='y';idx=1}if(Math.abs(n[2])>Math.abs(n[idx])){axis='z';idx=2}
+   const s=n[idx]>=0?1:-1;const layer=p.c.coord[idx];let dir=-s;if(reverse)dir=-dir;enqueue(axis,layer,dir,'click');return;
+ }
+}
+canvas.addEventListener('pointerdown',e=>{isDragging=true;pointerId=e.pointerId;canvas.setPointerCapture(pointerId);const r=canvas.getBoundingClientRect();downX=lastX=e.clientX-r.left;downY=lastY=e.clientY-r.top;moved=false;canvas.classList.add('dragging');});
+canvas.addEventListener('pointermove',e=>{if(!isDragging||e.pointerId!==pointerId)return;const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;const dx=x-lastX,dy=y-lastY;if(Math.hypot(x-downX,y-downY)>5)moved=true;if(moved){yaw+=dx*.008;pitch+=dy*.008;pitch=Math.max(-1.35,Math.min(1.35,pitch));}lastX=x;lastY=y;});
+canvas.addEventListener('pointerup',e=>{if(e.pointerId!==pointerId)return;const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;if(!moved)clickTurn(x,y,e.shiftKey);isDragging=false;pointerId=null;canvas.classList.remove('dragging');});
+canvas.addEventListener('pointercancel',()=>{isDragging=false;pointerId=null;canvas.classList.remove('dragging');});
+canvas.addEventListener('wheel',e=>{e.preventDefault();distance+=Math.sign(e.deltaY)*.42;distance=Math.max(5.7,Math.min(13,distance));},{passive:false});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+
+window.addEventListener('keydown',e=>{
+ if(e.repeat)return;const k=e.key.toUpperCase();if(defs[k]){doMove(k+(e.shiftKey?"'":''));e.preventDefault();}
+ else if(k==='S'){document.getElementById('shuffleBtn').click();}
+ else if(k==='Z'){document.getElementById('undoBtn').click();}
+ else if(e.key==='0'){buildCube();}
+});
+})();
+</script>
+</body>
+</html>
