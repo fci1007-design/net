@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>紫晶機械魔方｜3D 模擬器</title>
 <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 <div class="app">
@@ -13,7 +12,7 @@
     <section class="stage" id="stage">
       <canvas id="cubeCanvas" aria-label="可操作 3D 魔術方塊"></canvas>
       <div class="brand"><h1>紫晶機械魔方</h1><p>Purple Mechanical Cube · interactive prototype</p></div>
-      <div class="hint">拖曳：旋轉視角｜滾輪：縮放｜六面以不同紫階與符號區分｜轉動按鈕就在魔方下方</div>
+      <div class="hint">拖曳：旋轉視角｜滾輪：縮放｜六面直接用高辨識紫色系區分｜轉動按鈕就在魔方下方</div>
     </section>
 
     <section class="card move-card">
@@ -43,16 +42,12 @@
         <button id="undoBtn">上一步</button>
         <button id="cameraBtn">重設視角</button>
       </div>
+
+      <div class="child-copy">六面直接採用高辨識紫色系：亮薰衣草、紫羅蘭、靛紫、深梅紫、桃紅紫與莓紫；轉動後可直接從魔方本身看出混色。</div>
       <div class="child-toggle">
         <label class="switch"><span>兒童模式（大按鈕／簡化畫面）</span><input id="childMode" type="checkbox"></label>
         <div class="child-copy">開啟後會放大主要操作按鈕，並隱藏較進階的模擬設定，讓孩子更容易專心玩。</div>
       </div>
-    </section>
-
-    <section class="card">
-      <h2>面別識別</h2>
-      <div class="face-key" id="faceKey"></div>
-      <div class="legend">維持紫色主題，但六面改用不同紫階，並各自搭配一個符號，讓小朋友也比較好辨識。</div>
     </section>
 
     <section class="card advanced-card">
@@ -63,7 +58,7 @@
       <label class="switch"><span>顯示軸心導線</span><input id="axisGuide" type="checkbox" checked></label>
     </section>
 
-    <section class="card note note-card">此版本完全不依賴外部 3D 函式庫，直接使用瀏覽器 Canvas 繪製，並已把六面調整為「不同紫色＋不同符號」的辨識方式，保留整體高級紫色調，也更適合實際遊玩。</section>
+    <section class="card note note-card">此版本完全不依賴外部 3D 函式庫，直接使用瀏覽器 Canvas 繪製，六個面直接改成高對比但協調的紫色系：薰衣草、紫羅蘭、靛紫、深梅紫、桃紅紫與莓紫，不需要另外看圖例就能直接辨識。</section>
   </aside>
 </div>
 
@@ -78,6 +73,5 @@
 </div>
 
 <script src="app.js" defer></script>
-
 </body>
 </html>
