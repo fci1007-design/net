@@ -9,7 +9,6 @@ const speedRange=document.getElementById('speedRange');
 const gapRange=document.getElementById('gapRange');
 const autoSpinEl=document.getElementById('autoSpin');
 const axisGuideEl=document.getElementById('axisGuide');
-const faceKeyEl=document.getElementById('faceKey');
 const childModeEl=document.getElementById('childMode');
 const completionEl=document.getElementById('completion');
 const completionTextEl=document.getElementById('completionText');
@@ -23,14 +22,13 @@ let spacing=1.06,cubies=[],queue=[],history=[],activeTurn=null,moveCount=0;
 const SIZE=.91,HALF=SIZE/2,PI=Math.PI;
 
 const faceThemes={
-  px:{name:'紫羅蘭面',colors:['#8B5CF6','#D6BCFF'],symbol:'square',symbolText:'■'},
-  nx:{name:'靛紫面',colors:['#4F46E5','#A8A8FF'],symbol:'circle',symbolText:'●'},
-  py:{name:'薰衣草面',colors:['#C084FC','#F2D7FF'],symbol:'triangle',symbolText:'▲'},
-  ny:{name:'蘭花面',colors:['#9333EA','#E6A8FF'],symbol:'diamond',symbolText:'◆'},
-  pz:{name:'莓紫面',colors:['#D946EF','#FFB8EE'],symbol:'plus',symbolText:'✚'},
-  nz:{name:'夜藍紫面',colors:['#4338CA','#8FA0FF'],symbol:'hex',symbolText:'⬢'}
+  px:{name:'紫羅蘭',colors:['#7C3AED','#C4B5FD','#4C1D95']},
+  nx:{name:'靛紫',colors:['#4338CA','#A5B4FC','#1E1B4B']},
+  py:{name:'薰衣草',colors:['#C4B5FD','#F5F3FF','#7C3AED']},
+  ny:{name:'深梅紫',colors:['#701A75','#D8B4FE','#3B0764']},
+  pz:{name:'桃紅紫',colors:['#C026D3','#F5D0FE','#86198F']},
+  nz:{name:'莓紫',colors:['#BE185D','#F9A8D4','#831843']}
 };
-const faceOrder=['px','nx','py','ny','pz','nz'];
 const faces=[
  {k:'px',n:[1,0,0],v:[[1,-1,-1],[1,1,-1],[1,1,1],[1,-1,1]]},
  {k:'nx',n:[-1,0,0],v:[[-1,-1,1],[-1,1,1],[-1,1,-1],[-1,-1,-1]]},
@@ -39,18 +37,6 @@ const faces=[
  {k:'pz',n:[0,0,1],v:[[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]]},
  {k:'nz',n:[0,0,-1],v:[[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]]}
 ];
-
-function renderFaceKey(){
-  faceKeyEl.innerHTML='';
-  faceOrder.forEach(key=>{
-    const t=faceThemes[key];
-    const chip=document.createElement('div');
-    chip.className='face-chip';
-    chip.innerHTML=`<div class="face-swatch" style="background:linear-gradient(135deg, ${t.colors[1]}, ${t.colors[0]});"></div><div class="face-symbol">${t.symbolText}</div><div><b>${t.name}</b><small>${t.symbolText} 符號識別</small></div>`;
-    faceKeyEl.appendChild(chip);
-  });
-}
-renderFaceKey();
 
 function setChildMode(on){
  document.body.classList.toggle('child-mode',on);
@@ -153,53 +139,7 @@ function drawAxes(CM){
  ctx.restore();
 }
 function bodyGradient(pts){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,'#241334');g.addColorStop(1,'#0d0714');return g}
-function stickerGradient(pts,cs){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,cs[1]);g.addColorStop(.55,cs[0]);g.addColorStop(1,'#321449');return g}
-function quadBasis(pts){
- const cx=(pts[0].x+pts[1].x+pts[2].x+pts[3].x)/4;
- const cy=(pts[0].y+pts[1].y+pts[2].y+pts[3].y)/4;
- const ux=((pts[1].x-pts[0].x)+(pts[2].x-pts[3].x))/2;
- const uy=((pts[1].y-pts[0].y)+(pts[2].y-pts[3].y))/2;
- const vx=((pts[3].x-pts[0].x)+(pts[2].x-pts[1].x))/2;
- const vy=((pts[3].y-pts[0].y)+(pts[2].y-pts[1].y))/2;
- return {cx,cy,ux,uy,vx,vy};
-}
-function qPoint(B,a,b){return{x:B.cx+B.ux*a+B.vx*b,y:B.cy+B.uy*a+B.vy*b}}
-function drawStickerSymbol(pts,theme){
- const B=quadBasis(pts), size=.24;
- ctx.save();
- ctx.strokeStyle='rgba(255,255,255,.82)';
- ctx.fillStyle='rgba(255,255,255,.16)';
- ctx.lineWidth=Math.max(1.2,Math.min(2.2,Math.hypot(B.ux,B.uy)*.06));
- ctx.lineJoin='round';
- ctx.lineCap='round';
- const P=(a,b)=>qPoint(B,a,b);
- if(theme.symbol==='square'){
-  const ps=[P(-size,-size),P(size,-size),P(size,size),P(-size,size)];
-  ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ps.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.stroke();
- }else if(theme.symbol==='circle'){
-  const r=Math.min(Math.hypot(B.ux,B.uy),Math.hypot(B.vx,B.vy))*size*.85;
-  ctx.beginPath();ctx.arc(B.cx,B.cy,r,0,PI*2);ctx.fill();ctx.stroke();
- }else if(theme.symbol==='triangle'){
-  const ps=[P(0,-size*1.08),P(size,.92*size),P(-size,.92*size)];
-  ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ps.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.stroke();
- }else if(theme.symbol==='diamond'){
-  const ps=[P(0,-size*1.05),P(size,0),P(0,size*1.05),P(-size,0)];
-  ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ps.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.stroke();
- }else if(theme.symbol==='plus'){
-  const w=size*.34,l=size*.95;
-  const ps=[P(-w,-l),P(w,-l),P(w,-w),P(l,-w),P(l,w),P(w,w),P(w,l),P(-w,l),P(-w,w),P(-l,w),P(-l,-w),P(-w,-w)];
-  ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ps.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.stroke();
- }else if(theme.symbol==='hex'){
-  const ps=[];
-  for(let i=0;i<6;i++){
-    const ang=PI/6+i*PI/3;
-    ps.push(P(Math.cos(ang)*size,Math.sin(ang)*size));
-  }
-  ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ps.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.stroke();
- }
- ctx.restore();
-}
-
+function stickerGradient(pts,cs){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,cs[1]);g.addColorStop(.55,cs[0]);g.addColorStop(1,cs[2]);return g}
 function render(now){
  requestAnimationFrame(render);
  if(autoSpinEl.checked&&!dragging&&!activeTurn)yaw+=.0012;
@@ -224,8 +164,7 @@ function render(now){
   if(p.kind==='body'){
     ctx.fillStyle=bodyGradient(a);ctx.fill();ctx.strokeStyle='rgba(206,153,245,.20)';ctx.lineWidth=1;ctx.stroke();
   }else{
-    ctx.fillStyle=stickerGradient(a,p.theme.colors);ctx.fill();ctx.strokeStyle='rgba(247,231,255,.42)';ctx.lineWidth=1.2;ctx.stroke();
-    drawStickerSymbol(a,p.theme);
+    ctx.fillStyle=stickerGradient(a,p.theme.colors);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.52)';ctx.lineWidth=1.25;ctx.stroke();
   }
  }
  ctx.save();ctx.globalCompositeOperation='destination-over';const sh=ctx.createRadialGradient(W*.5,H*.74,1,W*.5,H*.74,Math.min(W,H)*.28);sh.addColorStop(0,'rgba(0,0,0,.38)');sh.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=sh;ctx.beginPath();ctx.ellipse(W*.5,H*.76,Math.min(W,H)*.25,Math.min(W,H)*.08,0,0,PI*2);ctx.fill();ctx.restore();
