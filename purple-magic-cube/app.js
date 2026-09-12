@@ -22,13 +22,14 @@ let spacing=1.06,cubies=[],queue=[],history=[],activeTurn=null,moveCount=0;
 const SIZE=.91,HALF=SIZE/2,PI=Math.PI;
 
 const faceThemes={
-  px:{name:'紫羅蘭',colors:['#7C3AED','#C4B5FD','#4C1D95']},
-  nx:{name:'靛紫',colors:['#4338CA','#A5B4FC','#1E1B4B']},
-  py:{name:'薰衣草',colors:['#C4B5FD','#F5F3FF','#7C3AED']},
-  ny:{name:'深梅紫',colors:['#701A75','#D8B4FE','#3B0764']},
-  pz:{name:'桃紅紫',colors:['#C026D3','#F5D0FE','#86198F']},
-  nz:{name:'莓紫',colors:['#BE185D','#F9A8D4','#831843']}
+  px:{name:'紫羅蘭',colors:['#8F5BFF','#E9DDFF','#6732F3']},
+  nx:{name:'靛紫',colors:['#4F46E5','#D0D5FF','#3531B5']},
+  py:{name:'亮薰衣草',colors:['#DDD0FF','#FFFFFF','#B085FF']},
+  ny:{name:'深梅紫',colors:['#8A2BE2','#E7C8FF','#6420B8']},
+  pz:{name:'桃紅紫',colors:['#E13BF1','#FFD6FB','#B10DD1']},
+  nz:{name:'莓紫',colors:['#D63384','#FFCCE5','#A61E5E']}
 };
+const centerMarks={px:'R',nx:'L',py:'U',ny:'D',pz:'F',nz:'B'};
 const faces=[
  {k:'px',n:[1,0,0],v:[[1,-1,-1],[1,1,-1],[1,1,1],[1,-1,1]]},
  {k:'nx',n:[-1,0,0],v:[[-1,-1,1],[-1,1,1],[-1,1,-1],[-1,-1,-1]]},
@@ -129,7 +130,7 @@ function cubieTransform(c,now){
 }
 function world(local,T){return add(T.pos,mv(T.R,local));}
 function insetVerts(face,T){
- const s=.80,off=.012;
+ const s=.94,off=.026;
  return face.v.map(v=>world(add(scale(v,HALF*s),scale(face.n,off)),T));
 }
 function drawAxes(CM){
@@ -138,8 +139,50 @@ function drawAxes(CM){
  [['x',[2.2,0,0]],['y',[0,2.2,0]],['z',[0,0,2.2]]].forEach(([,b],i)=>{const A=project([0,0,0],CM),B=project(b,CM);ctx.strokeStyle=['#bb6cff22','#e0baff22','#8b5cf622'][i];ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke()});
  ctx.restore();
 }
-function bodyGradient(pts){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,'#241334');g.addColorStop(1,'#0d0714');return g}
-function stickerGradient(pts,cs){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,cs[1]);g.addColorStop(.55,cs[0]);g.addColorStop(1,cs[2]);return g}
+function bodyGradient(pts){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,'#160d24');g.addColorStop(1,'#08040f');return g}
+function stickerGradient(pts,cs){const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);g.addColorStop(0,cs[1]);g.addColorStop(.42,cs[0]);g.addColorStop(1,cs[2]);return g}
+function quadBasis(pts){
+ const cx=(pts[0].x+pts[1].x+pts[2].x+pts[3].x)/4;
+ const cy=(pts[0].y+pts[1].y+pts[2].y+pts[3].y)/4;
+ const ux=((pts[1].x-pts[0].x)+(pts[2].x-pts[3].x))/2;
+ const uy=((pts[1].y-pts[0].y)+(pts[2].y-pts[3].y))/2;
+ const vx=((pts[3].x-pts[0].x)+(pts[2].x-pts[1].x))/2;
+ const vy=((pts[3].y-pts[0].y)+(pts[2].y-pts[1].y))/2;
+ return {cx,cy,ux,uy,vx,vy};
+}
+function drawStickerGloss(pts){
+ ctx.save();
+ ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);ctx.closePath();
+ ctx.clip();
+ const g=ctx.createLinearGradient(pts[0].x,pts[0].y,pts[2].x,pts[2].y);
+ g.addColorStop(0,'rgba(255,255,255,.28)');
+ g.addColorStop(.25,'rgba(255,255,255,.11)');
+ g.addColorStop(.6,'rgba(255,255,255,0)');
+ ctx.fillStyle=g;
+ ctx.fillRect(Math.min(pts[0].x,pts[1].x,pts[2].x,pts[3].x)-4,Math.min(pts[0].y,pts[1].y,pts[2].y,pts[3].y)-4,Math.abs(pts[2].x-pts[0].x)+10,Math.abs(pts[2].y-pts[0].y)+10);
+ ctx.restore();
+}
+function isCenterSticker(faceKey,c){
+ return (faceKey==='px'&&c.coord[0]===1&&c.coord[1]===0&&c.coord[2]===0) ||
+        (faceKey==='nx'&&c.coord[0]===-1&&c.coord[1]===0&&c.coord[2]===0) ||
+        (faceKey==='py'&&c.coord[1]===1&&c.coord[0]===0&&c.coord[2]===0) ||
+        (faceKey==='ny'&&c.coord[1]===-1&&c.coord[0]===0&&c.coord[2]===0) ||
+        (faceKey==='pz'&&c.coord[2]===1&&c.coord[0]===0&&c.coord[1]===0) ||
+        (faceKey==='nz'&&c.coord[2]===-1&&c.coord[0]===0&&c.coord[1]===0);
+}
+function drawCenterLabel(pts,label){
+ const B=quadBasis(pts);
+ const size=Math.max(10,Math.min(24,Math.hypot(B.ux,B.uy)*.18));
+ ctx.save();
+ ctx.font=`700 ${size}px system-ui, sans-serif`;
+ ctx.textAlign='center';
+ ctx.textBaseline='middle';
+ ctx.fillStyle='rgba(255,255,255,.88)';
+ ctx.shadowColor='rgba(0,0,0,.22)';
+ ctx.shadowBlur=6;
+ ctx.fillText(label,B.cx,B.cy);
+ ctx.restore();
+}
 function render(now){
  requestAnimationFrame(render);
  if(autoSpinEl.checked&&!dragging&&!activeTurn)yaw+=.0012;
@@ -154,7 +197,7 @@ function render(now){
   polys.push({kind:'body',pts:body,depth:body.reduce((s,p)=>s+p.dep,0)/4});
   if(c.stickers[f.k]){
     const st=insetVerts(f,T).map(v=>project(v,CM));
-    polys.push({kind:'sticker',pts:st,depth:st.reduce((s,p)=>s+p.dep,0)/4-.001,theme:faceThemes[f.k]});
+    polys.push({kind:'sticker',pts:st,depth:st.reduce((s,p)=>s+p.dep,0)/4-.001,theme:faceThemes[f.k],faceKey:f.k,cubie:c});
   }
  }}
  polys.sort((a,b)=>b.depth-a.depth);
@@ -162,9 +205,12 @@ function render(now){
   const a=p.pts;
   ctx.beginPath();ctx.moveTo(a[0].x,a[0].y);for(let i=1;i<a.length;i++)ctx.lineTo(a[i].x,a[i].y);ctx.closePath();
   if(p.kind==='body'){
-    ctx.fillStyle=bodyGradient(a);ctx.fill();ctx.strokeStyle='rgba(206,153,245,.20)';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle=bodyGradient(a);ctx.fill();ctx.strokeStyle='rgba(160,110,220,.14)';ctx.lineWidth=.9;ctx.stroke();
   }else{
-    ctx.fillStyle=stickerGradient(a,p.theme.colors);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.52)';ctx.lineWidth=1.25;ctx.stroke();
+    ctx.fillStyle=stickerGradient(a,p.theme.colors);ctx.fill();
+    drawStickerGloss(a);
+    ctx.strokeStyle='rgba(255,255,255,.62)';ctx.lineWidth=1.35;ctx.stroke();
+    if(isCenterSticker(p.faceKey,p.cubie)) drawCenterLabel(a,centerMarks[p.faceKey]);
   }
  }
  ctx.save();ctx.globalCompositeOperation='destination-over';const sh=ctx.createRadialGradient(W*.5,H*.74,1,W*.5,H*.74,Math.min(W,H)*.28);sh.addColorStop(0,'rgba(0,0,0,.38)');sh.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=sh;ctx.beginPath();ctx.ellipse(W*.5,H*.76,Math.min(W,H)*.25,Math.min(W,H)*.08,0,0,PI*2);ctx.fill();ctx.restore();
