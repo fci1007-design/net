@@ -3,12 +3,13 @@
   --txt:#fbf7ff;--muted:#cdbbdf;--accent:#9b4dee;--shadow:0 24px 70px rgba(0,0,0,.42)
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;color:var(--txt);background:radial-gradient(circle at 72% 8%,#41186d 0,#160a27 38%,#08050e 82%)}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;color:var(--txt);background:radial-gradient(circle at 72% 8%,#38135c 0,#12081f 38%,#040308 82%)}
 body{overflow:auto}
 button,input{font:inherit}
 .app{min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;padding:14px;align-items:start}
 .main{min-width:0;display:flex;flex-direction:column;gap:10px}
 .stage{height:clamp(440px,calc(100dvh - 190px),760px);min-height:440px;position:relative;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:radial-gradient(circle at 65% 22%,rgba(168,85,247,.20),transparent 38%),linear-gradient(145deg,rgba(58,30,86,.34),rgba(9,6,15,.92));box-shadow:var(--shadow)}
+.stage:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 52% 42%,rgba(255,255,255,.04),transparent 28%);pointer-events:none}
 #cubeCanvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #cubeCanvas.dragging{cursor:grabbing}
 .brand{position:absolute;left:20px;top:16px;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.45)}
